@@ -1,0 +1,21 @@
+.zone {
+  width: var(--size_zone);
+  height: var(--size_zone);
+  border: 1px solid lightgray;
+}
+
+.zone:hover {
+  border: 1px solid darkblue;
+}
+
+.zone_empty {
+  background-color: aliceblue;
+}
+
+.zone_fill {
+  background-color: darkblue;
+}
+
+.zone_cross {
+  background-color: lightgray;
+}

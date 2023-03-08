@@ -1,0 +1,24 @@
+#board_with_all_clues {
+  width: fit-content;
+}
+
+#board_with_clues_line {
+  display: flex;
+}
+
+#board {
+  flex-direction: column;
+  border: var(--border_board) solid black;
+}
+
+.border_bottom {
+  border-bottom: var(--border_gap) solid black;
+}
+
+.group_five_zones {
+  display: flex;
+}
+
+.group_five_zones.border_right {
+  border-right: var(--border_gap) solid red;
+}
