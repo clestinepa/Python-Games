@@ -7,5 +7,3 @@ export interface Level {
     line: Array<Array<number>>;
   };
 }
-
-

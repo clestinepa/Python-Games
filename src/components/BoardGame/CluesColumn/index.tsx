@@ -6,6 +6,7 @@ import "../../../styles/clues.css";
 interface Props {
   level: Level;
 }
+
 const CluesColumn: React.FC<Props> = (props: Props) => {
   const allCluesColumns: Array<Array<JSX.Element>> = [];
 

@@ -7,17 +7,17 @@ const ActionButton: React.FC = () => {
 
   const handleClick = () => {
     if (window.globalData.REACT_APP_GAME_ON_FILL) {
-        setValueState("Cross");
-        setClassNameState("cross");
-        window.globalData.REACT_APP_GAME_ON_FILL = false;
-        window.globalData.REACT_APP_GAME_ON_CROSS = true;
-      } else if (window.globalData.REACT_APP_GAME_ON_CROSS) {
-        setValueState("Fill");
-        setClassNameState("fill");
-        window.globalData.REACT_APP_GAME_ON_FILL = true;
-        window.globalData.REACT_APP_GAME_ON_CROSS = false;
-      }
-  }
+      setValueState("Cross");
+      setClassNameState("cross");
+      window.globalData.REACT_APP_GAME_ON_FILL = false;
+      window.globalData.REACT_APP_GAME_ON_CROSS = true;
+    } else if (window.globalData.REACT_APP_GAME_ON_CROSS) {
+      setValueState("Fill");
+      setClassNameState("fill");
+      window.globalData.REACT_APP_GAME_ON_FILL = true;
+      window.globalData.REACT_APP_GAME_ON_CROSS = false;
+    }
+  };
 
   return (
     <button

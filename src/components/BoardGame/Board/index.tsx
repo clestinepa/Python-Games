@@ -6,8 +6,10 @@ import "../../../styles/board.css";
 interface Props {
   level: Level;
 }
+
 const Board: React.FC<Props> = (props: Props) => {
   const allLines: Array<Array<Array<JSX.Element>>> = [];
+
   for (let nb_line = 0; nb_line < props.level.size; nb_line++) {
     let line: Array<Array<JSX.Element>> = [];
     let group_five_zones: Array<JSX.Element> = [

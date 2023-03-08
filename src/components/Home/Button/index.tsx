@@ -25,17 +25,14 @@ const Button: React.FC<Props> = (props: Props) => {
   }
   const displayLevel = () => {
     if (props.difficulty === 1) {
-        console.log("click");
-        window.globalData.REACT_APP_ON_GAME = true;
-        console.log(window.globalData);
+      console.log("click");
+      window.globalData.REACT_APP_ON_GAME = true;
+      console.log(window.globalData);
     }
   };
 
   return (
-    <button
-      className="buttonChooseLevel"
-      onClick={() => displayLevel()}
-    >
+    <button className="buttonChooseLevel" onClick={() => displayLevel()}>
       {desc}
     </button>
   );
