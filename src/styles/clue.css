@@ -1,12 +1,11 @@
 .clue_normal {
-  color: aliceblue;
+  color: var(--color_font_clue_normal);
 }
 
 .clue_ERROR {
-  color: aliceblue;
-  /* color: red; */
+  color: var(--color_font_clue_error);
 }
 
 .clue_done {
-  color: rgb(200, 200, 200);
+  color: var(--color_font_clue_done);
 }

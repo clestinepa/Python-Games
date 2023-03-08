@@ -16,7 +16,7 @@ const Board: React.FC<Props> = (props: Props) => {
       <p></p>,
       <p></p>,
       <p></p>,
-    ];
+    ]; //I don't know why but group_five_zones needs initialization
     for (let nb_column = 0; nb_column < props.level.size; nb_column++) {
       if (group_five_zones.length === 5) {
         line.push(group_five_zones);

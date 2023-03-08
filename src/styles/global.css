@@ -4,14 +4,37 @@
   text-decoration: none;
   list-style: none;
   box-sizing: border-box;
-  --size_zone: 30px;
-  --margin_clue: 3px;
-  --border_board:2px;
-  --border_gap:2px;
+
+  --size_zone: 50px;
+
+  --size_border_board_inside: 2px;
+  --size_border_board_outside: 2px;
+  --size_border_zone: 1px;
+  --size_border_clue: 1px;
+
+  --size_font_clue: calc(var(--size_zone) / 2);
+  --margin_clue: calc(var(--size_zone) / 10);
+  --size_clues_long: calc(var(--size_zone) * 2);
+  --size_clues_short: calc(var(--margin_clue) * 7);
+  --border_radius: calc(var(--size_zone) / 6);
+
+  --color_border_board: black;
+  --color_border_clues: gray;
+  --color_border_zone: lightgray;
+  --color_border_zone_hover: var(--color_zone_fill);
+  --color_bg_clues: lightslategray;
+  --color_bg: lightblue;
+  --color_bg_clue_error: indianred;
+  --color_zone_empty: aliceblue;
+  --color_zone_fill: darkblue;
+  --color_zone_cross: lightgray;
+  --color_font_clue_normal: var(--color_zone_empty);
+  --color_font_clue_error: var(--color_zone_empty);
+  --color_font_clue_done: rgb(200, 200, 200);
 }
 
 body {
-  background: lightblue;
+  background: var(--color_bg);
 }
 
 ul,
