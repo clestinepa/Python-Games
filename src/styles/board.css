@@ -11,14 +11,15 @@
   border: var(--size_border_board_outside) solid var(--color_border_board);
 }
 
-.border_bottom {
-  border-bottom: var(--size_border_board_inside) solid var(--color_border_board);
-}
-
 .group_five_zones {
   display: flex;
 }
 
-.group_five_zones.border_right {
+.border_bottom {
+  border-bottom: var(--size_border_board_inside) solid var(--color_border_board);
+}
+
+.border_right {
   border-right: var(--size_border_board_inside) solid var(--color_border_board);
 }
+

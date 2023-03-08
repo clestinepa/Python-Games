@@ -23,9 +23,14 @@ const CluesLine: React.FC<Props> = (props: Props) => {
         return (
           <li
             key={index}
-            id={"container_line_" + index}
+            id={"container_clues_line_" + index}
             className={
-              "container_clues_line" + (index === 4 ? " border_bottom" : "")
+              "container_clues_line" +
+              ((index + 1) % 5 === 0
+                ? index + 1 !== props.level.size
+                  ? " border_bottom"
+                  : ""
+                : "")
             }
           >
             <div id={"line_" + index} className={"clues_line clues_normal"}>

@@ -5,10 +5,10 @@
   list-style: none;
   box-sizing: border-box;
 
-  --size_zone: 50px;
+  --size_zone: 30px;
 
   --size_border_board_inside: 2px;
-  --size_border_board_outside: 2px;
+  --size_border_board_outside: 4px;
   --size_border_zone: 1px;
   --size_border_clue: 1px;
 

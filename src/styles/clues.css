@@ -1,13 +1,12 @@
 #clues_lines {
   flex-direction: column;
-  justify-content: space-around;
-  margin: var(--size_border_board_outside) 0
+  margin: var(--size_border_board_outside) 0;
 }
 
 #clues_columns {
-  justify-content: space-around;
   padding-left: calc(var(--size_clues_long) + var(--margin_clue) * 2);
   width: 100%;
+  margin: 0 var(--size_border_board_outside);
 }
 
 .container_clues_line {
@@ -16,6 +15,14 @@
 
 .container_clues_line.border_bottom {
   height: calc(var(--size_zone) + var(--size_border_board_inside));
+}
+
+.container_clues_column {
+  width: var(--size_zone);
+  justify-content: center;
+}
+.container_clues_column.border_right {
+  width: calc(var(--size_zone) + var(--size_border_board_inside));
 }
 
 .clues_column,
