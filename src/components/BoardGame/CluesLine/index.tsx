@@ -1,18 +1,17 @@
 import React from "react";
 import Clue from "../Clue";
-import { Level } from "../interfaces";
 import "../../../styles/clues.css";
+import { useAppSelector } from "../../../redux/hooks";
 
-interface Props {
-  level: Level;
-}
+const CluesLine: React.FC = () => {
+  const levelSize = useAppSelector((state) => state.boardGame.level.size)
+  const levelCuesLine = useAppSelector((state) => state.boardGame.level.clues.line)
 
-const CluesLine: React.FC<Props> = (props: Props) => {
   const allCluesLines: Array<Array<JSX.Element>> = [];
 
-  for (let nb_line = 0; nb_line < props.level.size; nb_line++) {
+  for (let nb_line = 0; nb_line < levelSize; nb_line++) {
     let cluesLine: Array<JSX.Element> = [];
-    for (let value of props.level.clues.line[nb_line]) {
+    for (let value of levelCuesLine[nb_line]) {
       cluesLine.push(<Clue value={value} />);
     }
     allCluesLines.push(cluesLine);
@@ -28,7 +27,7 @@ const CluesLine: React.FC<Props> = (props: Props) => {
             className={
               "container_clues_line" +
               ((index + 1) % 5 === 0
-                ? index + 1 !== props.level.size
+                ? index + 1 !== levelSize
                   ? " border_bottom"
                   : ""
                 : "")

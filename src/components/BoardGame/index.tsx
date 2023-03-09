@@ -3,7 +3,6 @@ import CluesColumn from "./CluesColumn";
 import CluesLine from "./CluesLine";
 import Board from "./Board";
 import ActionButton from "./ActionButton";
-import { Level } from "./interfaces";
 import "../../styles/board.css";
 
 /** Detail des elements
@@ -27,18 +26,14 @@ import "../../styles/board.css";
  *      * clue_ERROR / clue_done / clue_normal
  */
 
-interface Props {
-  level: Level;
-}
-
-const BoardGame: React.FC<Props> = (props: Props) => {
+const BoardGame: React.FC = () => {
   return (
     <div id="board_game">
       <div id="board_with_all_clues">
-        <CluesColumn level={props.level} />
+        <CluesColumn />
         <div id="board_with_clues_line">
-          <CluesLine level={props.level} />
-          <Board level={props.level} />
+          <CluesLine />
+          <Board />
         </div>
       </div>
       <ActionButton />
