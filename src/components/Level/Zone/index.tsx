@@ -14,16 +14,10 @@ interface Props {
   nb_column: number;
 }
 
-//lié className et useSelector currentBoard[properZone]
 const Zone: React.FC<Props> = (props: Props) => {
   const dispatch = useAppDispatch();
   const action = useAppSelector(selectApiAction);
   const board = useAppSelector(selectApiBoard);
-
-  const [zoneState, setZoneState] = React.useState({
-    class:
-      "zone zone_empty line_" + props.nb_line + " column_" + props.nb_column,
-  });
 
   const handleMouseDown = () => {
     clickZone();
@@ -42,7 +36,6 @@ const Zone: React.FC<Props> = (props: Props) => {
   };
 
   const clickZone = () => {
-    let new_state = zoneState;
     if (action.onFill) {
       if (board.currentBoard[props.nb_line][props.nb_column] === 1) {
         //if already fill
@@ -51,13 +44,10 @@ const Zone: React.FC<Props> = (props: Props) => {
           dispatch(onEmpty(true));
         }
         if (action.onEmpty) {
-          new_state.class = zoneState.class.replace("zone_fill", "zone_empty");
           dispatch(emptyZone(props.nb_line, props.nb_column));
         }
       } else {
         if (!action.onEmpty) {
-          new_state.class = zoneState.class.replace("zone_empty", "zone_fill");
-          new_state.class = new_state.class.replace("zone_cross", "zone_fill");
           dispatch(fillZone(props.nb_line, props.nb_column));
         }
       }
@@ -69,18 +59,14 @@ const Zone: React.FC<Props> = (props: Props) => {
           dispatch(onEmpty(true));
         }
         if (action.onEmpty) {
-          new_state.class = zoneState.class.replace("zone_cross", "zone_empty");
           dispatch(emptyZone(props.nb_line, props.nb_column));
         }
       } else {
         if (!action.onEmpty) {
-          new_state.class = zoneState.class.replace("zone_empty", "zone_cross");
-          new_state.class = new_state.class.replace("zone_fill", "zone_cross");
           dispatch(crossZone(props.nb_line, props.nb_column));
         }
       }
     }
-    setZoneState(new_state);
     checkConstraint(props.nb_line, props.nb_column);
   };
 
@@ -128,7 +114,7 @@ const Zone: React.FC<Props> = (props: Props) => {
       onMouseDown={() => handleMouseDown()}
       onMouseEnter={() => handleMouseEnter()}
       id={"line_" + props.nb_line + "_column_" + props.nb_column}
-      className={zoneState.class}
+      className={"zone " + board.currentClass[props.nb_line][props.nb_column] + " line_" + props.nb_line + " column_" + props.nb_column}
       draggable={false}
     ></button>
   );
