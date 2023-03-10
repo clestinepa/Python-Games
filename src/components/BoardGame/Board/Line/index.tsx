@@ -4,21 +4,14 @@ import GroupFiveZone from "./GroupFiveZone";
 
 interface Props {
   nb_line: number;
-  last?: boolean;
 }
 
 const Line: React.FC<Props> = (props: Props) => {
   const level = useAppSelector(selectApiLevel);
-  const line: Array<JSX.Element> = [];
 
+  let line: Array<JSX.Element> = [];
   for (let index = 0; index < level.size / 5; index++) {
-    line.push(
-      <GroupFiveZone
-        nb_line={props.nb_line}
-        index={index}
-        last={index + 1 === level.size / 5 ? true : false}
-      />
-    );
+    line.push(<GroupFiveZone nb_line={props.nb_line} index={index} />);
   }
 
   const renderLine = () => {
@@ -33,7 +26,7 @@ const Line: React.FC<Props> = (props: Props) => {
       className={
         "line" +
         ((props.nb_line + 1) % 5 === 0
-          ? props.last
+          ? props.nb_line + 1 === level.size
             ? ""
             : " border_bottom"
           : "")
