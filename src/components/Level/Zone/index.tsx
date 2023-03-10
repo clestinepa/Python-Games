@@ -2,7 +2,12 @@ import React from "react";
 import "../../../styles/zone.css";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { onAction, onEmpty, selectApiAction } from "../ActionButton/redux";
-import { crossZone, emptyZone, fillZone, selectApiBoard } from "../Board/redux";
+import {
+  crossZone,
+  emptyZone,
+  fillZone,
+  selectApiBoard,
+} from "../Board/redux";
 
 interface Props {
   nb_line: number;
@@ -18,10 +23,7 @@ const Zone: React.FC<Props> = (props: Props) => {
   const [zoneState, setZoneState] = React.useState({
     class:
       "zone zone_empty line_" + props.nb_line + " column_" + props.nb_column,
-    state: 0,
   });
-
-  // const [classNameState, setClassNameState] = useState();
 
   const handleMouseDown = () => {
     clickZone();

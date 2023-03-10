@@ -1,5 +1,5 @@
 import { createReducer } from "@reduxjs/toolkit";
-import { ActionState } from "../../interfaces/BoardGameState";
+import { ActionState } from "../../interfaces/LevelState";
 import { onAction, onCross, onEmpty, onFill } from "./actions";
 
 const initialState: ActionState = {

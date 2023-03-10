@@ -1,4 +1,14 @@
 import { createAction } from "@reduxjs/toolkit";
+import { Level } from "../../interfaces/LevelSource";
+
+export const initialBoard = createAction(
+  "board/initialBoard",
+  function prepare(level: Level) {
+    return {
+      payload: { level },
+    };
+  }
+);
 
 export const fillZone = createAction(
   "board/fillZone",

@@ -1,5 +1,5 @@
 import { createReducer } from "@reduxjs/toolkit";
-import { LevelState } from "../interfaces/BoardGameState";
+import { LevelState } from "../interfaces/LevelState";
 import { setNameLevel } from "./actions";
 
 const initialState: LevelState = {
