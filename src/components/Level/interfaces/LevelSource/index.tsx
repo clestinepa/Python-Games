@@ -8,3 +8,8 @@ export interface Level {
     line: Array<Array<number>>;
   };
 }
+
+export interface classClues {
+  classGlobal : string;
+  classClues : string[];
+}

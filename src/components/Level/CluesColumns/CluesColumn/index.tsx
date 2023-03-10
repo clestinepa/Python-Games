@@ -1,7 +1,7 @@
 import { useAppSelector } from "../../../../redux/hooks";
-import { selectApiBoard } from "../../Board/redux";
-import Clue from "../../Clue";
+import Clue, { ClueType } from "../../Clue";
 import { selectApiLevel } from "../../redux";
+import { selectApiCluesColumns } from "../redux";
 
 interface Props {
   nb_column: number;
@@ -9,11 +9,23 @@ interface Props {
 
 const CluesColumn: React.FC<Props> = (props: Props) => {
   const level = useAppSelector(selectApiLevel);
-  const board = useAppSelector(selectApiBoard);
+  const classCluesColumns = useAppSelector(selectApiCluesColumns);
 
   let cluesColumn: Array<JSX.Element> = [];
-  for (let value of level.clues.column[props.nb_column]) {
-    cluesColumn.push(<Clue value={value} />);
+  for (
+    let index = 0;
+    index < level.clues.column[props.nb_column].length;
+    index++
+  ) {
+    let value = level.clues.column[props.nb_column][index];
+    cluesColumn.push(
+      <Clue
+        nb_column={props.nb_column}
+        index={index}
+        value={value}
+        type={ClueType.Column}
+      />
+    );
   }
 
   const renderCluesColumns = () => {
@@ -37,7 +49,9 @@ const CluesColumn: React.FC<Props> = (props: Props) => {
     >
       <div
         id={"column_" + props.nb_column}
-        className={"clues_column " + board.classCluesColumns[props.nb_column]}
+        className={
+          "clues_column " + classCluesColumns[props.nb_column].classGlobal
+        }
       >
         {renderCluesColumns()}
       </div>

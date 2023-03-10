@@ -1,10 +1,14 @@
 import "../../../styles/clues.css";
-import { useAppSelector } from "../../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { selectApiLevel } from "../redux";
-import CluesLine from "./CluesLine/indes";
+import CluesLine from "./CluesLine";
+import { initialCluesLines } from "./redux";
 
 const CluesLines: React.FC = () => {
+  const dispatch = useAppDispatch();
   const level = useAppSelector(selectApiLevel);
+
+  dispatch(initialCluesLines(level));
 
   let cluesLines: Array<JSX.Element> = [];
   for (let nb_line = 0; nb_line < level.size; nb_line++) {

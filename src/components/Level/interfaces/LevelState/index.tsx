@@ -1,15 +1,21 @@
-import {Level} from "../LevelSource";
+import {classClues, Level} from "../LevelSource";
 
 export interface LevelState {
   level: Level;
 }
 
 export interface BoardState {
-  currentBoard: Array<Array<number>>;
-  currentClass: Array<Array<string>>;
-  classCluesLines: Array<string>;
-  classCluesColumns: Array<string>;
+  currentBoard: number[][];
+  currentClass: string[][];  
 }
+
+export interface CluesLinesState {
+  classCluesLines: classClues[];
+}
+export interface CluesColumnsState {
+  classCluesColumns: classClues[];
+}
+
 
 export interface ActionState {
   action: {
