@@ -1,7 +1,7 @@
 import React from "react";
 import { useAppSelector } from "../../../../redux/hooks";
 import { selectApiLevel } from "../../redux";
-import GroupFiveZone from "./GroupFiveZone";
+import GroupFiveZone from "./GroupFiveZones";
 
 interface Props {
   nb_line: number;

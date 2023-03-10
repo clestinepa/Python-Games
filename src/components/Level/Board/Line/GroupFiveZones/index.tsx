@@ -1,13 +1,13 @@
 import { useAppSelector } from "../../../../../redux/hooks";
 import { selectApiLevel } from "../../../redux";
-import Zone from "../../Zone";
+import Zone from "./Zone";
 
 interface Props {
   nb_line: number;
   index: number;
 }
 
-const GroupFiveZone: React.FC<Props> = (props: Props) => {
+const GroupFiveZones: React.FC<Props> = (props: Props) => {
   const level = useAppSelector(selectApiLevel);
 
   let group_five_zones: Array<JSX.Element> = [];
@@ -35,4 +35,4 @@ const GroupFiveZone: React.FC<Props> = (props: Props) => {
   );
 };
 
-export default GroupFiveZone;
+export default GroupFiveZones;

@@ -1,13 +1,13 @@
 import React from "react";
-import "../../../styles/zone.css";
-import { useAppDispatch, useAppSelector } from "../../../../redux/hooks";
-import { onAction, onEmpty, selectApiAction } from "../../ActionButton/redux";
+import "../../../../../../styles/zone.css";
+import { useAppDispatch, useAppSelector } from "../../../../../../redux/hooks";
+import { onAction, onEmpty, selectApiAction } from "../../../../ActionButton/redux";
 import {
   crossZone,
   emptyZone,
   fillZone,
   selectApiBoard,
-} from "../redux";
+} from "../../../redux";
 
 interface Props {
   nb_line: number;
