@@ -5,7 +5,7 @@ import { selectApiLevel } from "../redux";
 
 const Board: React.FC = () => {
   const level = useAppSelector(selectApiLevel);
-
+ 
   let lines: Array<JSX.Element> = [];
   for (let nb_line = 0; nb_line < level.size; nb_line++) {
     lines.push(<Line nb_line={nb_line} />);

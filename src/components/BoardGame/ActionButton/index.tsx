@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React from "react";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import "../../../styles/action.css";
 import { onCross, onFill, selectApiAction } from "./redux";
@@ -7,19 +7,21 @@ const ActionButton: React.FC = () => {
   const dispatch = useAppDispatch();
   const action = useAppSelector(selectApiAction);
 
-  const [classNameState, setClassNameState] = useState("fill");
-  const [valueState, setValueState] = useState("Fill");
+  const [actionButtonState, setActionButtonState] = React.useState({
+    class:
+    "fill",
+    text: "Fill",
+  });
+
 
   const handleClick = () => {
 
     if (action.onFill) {
-      setValueState("Cross");
-      setClassNameState("cross");
+      setActionButtonState({class:"cross", text:"Cross"});
       dispatch(onFill(false))
       dispatch(onCross(true))
     } else if (action.onCross) {
-      setValueState("Fill");
-      setClassNameState("fill");
+      setActionButtonState({class:"fill", text:"Fill"});
       dispatch(onFill(true))
       dispatch(onCross(false))
     }
@@ -29,9 +31,9 @@ const ActionButton: React.FC = () => {
     <button
       onClick={() => handleClick()}
       id="action"
-      className={classNameState}
+      className={actionButtonState.class}
     >
-      {valueState}
+      {actionButtonState.text}
     </button>
   );
 };
