@@ -33,17 +33,13 @@ export const cluesLinesReducer = createReducer(initialState, (builder) => {
             }
         })
         .addCase(cluesLineError, (state, action) => {
+          if (state.classCluesLines[action.payload.nb_line].classGlobal === "clues_normal") {
             state.classCluesLines[action.payload.nb_line].classGlobal = "clues_ERROR";
+          }
             for (let nb_clue = 0; nb_clue < state.classCluesLines[action.payload.nb_line].classClues.length; nb_clue++) {
+              if (state.classCluesLines[action.payload.nb_line].classClues[nb_clue] === "clue_normal") {
                 state.classCluesLines[action.payload.nb_line].classClues[nb_clue] = "clue_ERROR";
+              }
             }
         });
 });
-
-// function displayCluesLineError(nb_line) {
-//   clues_lines.children[nb_line].className = clues_lines.children[nb_line].className.replace("clues_normal", "clues_ERROR");
-//   for (let clue_ERROR of clues_lines.children[nb_line].children) {
-//     console.log(clue_ERROR.id)
-//     clue_ERROR.className = clue_ERROR.className.replace("clue_normal", "clue_ERROR");
-//   }
-// }
