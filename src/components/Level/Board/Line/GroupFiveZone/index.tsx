@@ -1,6 +1,6 @@
 import { useAppSelector } from "../../../../../redux/hooks";
 import { selectApiLevel } from "../../../redux";
-import Zone from "../../../Zone";
+import Zone from "../../Zone";
 
 interface Props {
   nb_line: number;
