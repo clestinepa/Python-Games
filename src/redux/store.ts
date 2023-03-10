@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { actionReducer } from "../components/BoardGame/ActionButton/redux";
-import { boardReducer } from "../components/BoardGame/Board/redux";
-import { levelReducer } from "../components/BoardGame/redux";
+import { actionReducer } from "../components/Level/ActionButton/redux";
+import { boardReducer } from "../components/Level/Board/redux";
+import { levelReducer } from "../components/Level/redux";
 
 export const store = configureStore({
   reducer: {
