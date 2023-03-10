@@ -1,4 +1,3 @@
-import React from "react";
 import BoardGame from "../BoardGame";
 import "../../styles/global.css";
 

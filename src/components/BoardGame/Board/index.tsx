@@ -1,4 +1,3 @@
-import React from "react";
 import Line from "./Line";
 import "../../../styles/board.css";
 import { useAppSelector } from "../../../redux/hooks";

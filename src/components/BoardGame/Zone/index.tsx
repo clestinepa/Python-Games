@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import "../../../styles/zone.css";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { onAction, onEmpty, selectApiAction } from "../ActionButton/redux";
@@ -36,7 +36,6 @@ const Zone: React.FC<Props> = (props: Props) => {
       clickZone();
     }
   };
-
   document.onmouseup = () => {
     if (action.onAction) {
       dispatch(onAction(false));

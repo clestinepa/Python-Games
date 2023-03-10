@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import "../../../styles/action.css";
 import { onCross, onFill, selectApiAction } from "./redux";

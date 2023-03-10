@@ -1,6 +1,5 @@
-import React from "react";
-import CluesColumn from "./CluesColumn";
-import CluesLine from "./CluesLine";
+import CluesColumns from "./CluesColumns";
+import CluesLines from "./CluesLines";
 import Board from "./Board";
 import ActionButton from "./ActionButton";
 import "../../styles/board.css";
@@ -30,9 +29,9 @@ const BoardGame: React.FC = () => {
   return (
     <div id="board_game">
       <div id="board_with_all_clues">
-        <CluesColumn />
+        <CluesColumns />
         <div id="board_with_clues_line">
-          <CluesLine />
+          <CluesLines />
           <Board />
         </div>
       </div>

@@ -1,4 +1,3 @@
-import React from "react";
 import Zone from "../../../Zone";
 
 interface Props {

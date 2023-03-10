@@ -1,4 +1,3 @@
-import React from "react";
 import { useAppSelector } from "../../../../redux/hooks";
 import { selectApiLevel } from "../../redux";
 import GroupFiveZone from "./GroupFiveZone";

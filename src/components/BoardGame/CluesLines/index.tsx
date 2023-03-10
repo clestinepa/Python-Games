@@ -1,10 +1,9 @@
-import React from "react";
 import Clue from "../Clue";
 import "../../../styles/clues.css";
 import { useAppSelector } from "../../../redux/hooks";
 import { selectApiLevel } from "../redux";
 
-const CluesLine: React.FC = () => {
+const CluesLines: React.FC = () => {
   const level = useAppSelector(selectApiLevel)
 
   const allCluesLines: Array<Array<JSX.Element>> = [];
@@ -45,4 +44,4 @@ const CluesLine: React.FC = () => {
   );
 };
 
-export default CluesLine;
+export default CluesLines;
