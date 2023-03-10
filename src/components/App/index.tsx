@@ -1,8 +1,8 @@
-import BoardGame from "../BoardGame";
+import Level from "../BoardGame";
 import "../../styles/global.css";
 
 const App: React.FC = () => {
-  return <BoardGame />;
+  return <Level />;
 };
 
 export default App;

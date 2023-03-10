@@ -1,8 +1,8 @@
 import { createReducer } from "@reduxjs/toolkit";
-import { BoardGameState } from "../interfaces/BoardGameState";
-import { crossZone, emptyZone, fillZone } from "./actions";
+import { LevelState } from "../interfaces/BoardGameState";
+import { setNameLevel } from "./actions";
 
-const initialState: BoardGameState = {
+const initialState: LevelState = {
   level: {
     name: "test",
     difficulty: 1,
@@ -24,30 +24,12 @@ const initialState: BoardGameState = {
       line: [[4], [2, 2], [2, 2], [2, 2], [2, 2], [2, 2], [4], [6], [8], [10]],
     },
   },
-  currentBoard: [
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  ],
 };
 
 
-export const boardGameReducer = createReducer(initialState, (builder) => {
+export const levelReducer = createReducer(initialState, (builder) => {
   builder
-    .addCase(fillZone, (state, action) => {
-      state.currentBoard[action.payload.line][action.payload.column] = 1;
-    })
-    .addCase(crossZone, (state, action) => {
-      state.currentBoard[action.payload.line][action.payload.column] = 2;
-    })
-    .addCase(emptyZone, (state, action) => {
-      state.currentBoard[action.payload.line][action.payload.column] = 0;
+    .addCase(setNameLevel, (state, action) => {
+      state.level.name = action.payload.new_name;
     })
 });

@@ -1,4 +1,4 @@
-export interface BoardGameState {
+export interface LevelState {
   level: {
     name: string;
     difficulty: number;
@@ -9,7 +9,13 @@ export interface BoardGameState {
       line: Array<Array<number>>;
     };
   };
-  currentBoard: Array<Array<number>>
+}
+
+export interface BoardState {
+  currentBoard: Array<Array<number>>;
+  currentClass: Array<Array<string>>;
+  classCluesLines: Array<string>;
+  classCluesColumns: Array<string>;
 }
 
 export interface ActionState {

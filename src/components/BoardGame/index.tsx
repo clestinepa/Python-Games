@@ -25,7 +25,7 @@ import "../../styles/board.css";
  *      * clue_ERROR / clue_done / clue_normal
  */
 
-const BoardGame: React.FC = () => {
+const Level: React.FC = () => {
   return (
     <div id="board_game">
       <div id="board_with_all_clues">
@@ -40,4 +40,4 @@ const BoardGame: React.FC = () => {
   );
 };
 
-export default BoardGame;
+export default Level;

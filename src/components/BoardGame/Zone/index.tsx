@@ -2,13 +2,7 @@ import React from "react";
 import "../../../styles/zone.css";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { onAction, onEmpty, selectApiAction } from "../ActionButton/redux";
-import {
-  crossZone,
-  emptyZone,
-  fillZone,
-  selectApiCurrentBoard,
-  selectApiLevel,
-} from "../redux";
+import { crossZone, emptyZone, fillZone, selectApiBoard } from "../Board/redux";
 
 interface Props {
   nb_line: number;
@@ -19,8 +13,7 @@ interface Props {
 const Zone: React.FC<Props> = (props: Props) => {
   const dispatch = useAppDispatch();
   const action = useAppSelector(selectApiAction);
-  const currentBoard = useAppSelector(selectApiCurrentBoard);
-  const level = useAppSelector(selectApiLevel);
+  const board = useAppSelector(selectApiBoard);
 
   const [zoneState, setZoneState] = React.useState({
     class:
@@ -49,7 +42,7 @@ const Zone: React.FC<Props> = (props: Props) => {
   const clickZone = () => {
     let new_state = zoneState;
     if (action.onFill) {
-      if (currentBoard[props.nb_line][props.nb_column] === 1) {
+      if (board.currentBoard[props.nb_line][props.nb_column] === 1) {
         //if already fill
         if (!action.onAction) {
           //only the first zone define if its an empty action or not
@@ -67,7 +60,7 @@ const Zone: React.FC<Props> = (props: Props) => {
         }
       }
     } else if (action.onCross) {
-      if (currentBoard[props.nb_line][props.nb_column] === 2) {
+      if (board.currentBoard[props.nb_line][props.nb_column] === 2) {
         //if already cross
         if (!action.onAction) {
           //only the first zone define if its an empty action or not
