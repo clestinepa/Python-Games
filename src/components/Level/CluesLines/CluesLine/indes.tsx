@@ -1,4 +1,5 @@
 import { useAppSelector } from "../../../../redux/hooks";
+import { selectApiBoard } from "../../Board/redux";
 import Clue from "../../Clue";
 import { selectApiLevel } from "../../redux";
 
@@ -8,6 +9,7 @@ interface Props {
 
 const CluesLine: React.FC<Props> = (props: Props) => {
   const level = useAppSelector(selectApiLevel);
+  const board = useAppSelector(selectApiBoard);
 
   let cluesLine: Array<JSX.Element> = [];
   for (let value of level.clues.line[props.nb_line]) {
@@ -22,18 +24,18 @@ const CluesLine: React.FC<Props> = (props: Props) => {
 
   return (
     <li
-    key={props.nb_line}
-    id={"container_clues_line_" + props.nb_line}
-    className={
-      "container_clues_line" +
-      ((props.nb_line + 1) % 5 === 0
-        ? props.nb_line + 1 !== level.size
-          ? " border_bottom"
-          : ""
-        : "")
-    }
+      key={props.nb_line}
+      id={"container_clues_line_" + props.nb_line}
+      className={
+        "container_clues_line" +
+        ((props.nb_line + 1) % 5 === 0
+          ? props.nb_line + 1 !== level.size
+            ? " border_bottom"
+            : ""
+          : "")
+      }
     >
-      <div id={"line_" + props.nb_line} className={"clues_line clues_normal"}>
+      <div id={"line_" + props.nb_line} className={"clues_line " + board.classCluesLines[props.nb_line]}>
         {renderCluesColumns()}
       </div>
     </li>
