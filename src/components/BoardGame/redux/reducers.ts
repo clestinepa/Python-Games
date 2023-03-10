@@ -1,9 +1,8 @@
 import { createReducer } from "@reduxjs/toolkit";
 import { BoardGameState } from "../interfaces/BoardGameState";
-import { onAction, onCross, onEmpty, onFill } from "./actions";
+import { crossZone, emptyZone, fillZone } from "./actions";
 
 const initialState: BoardGameState = {
-  action: { onAction: false, onFill: true, onCross: false, onEmpty: false },
   level: {
     name: "test",
     difficulty: 1,
@@ -39,18 +38,16 @@ const initialState: BoardGameState = {
   ],
 };
 
+
 export const boardGameReducer = createReducer(initialState, (builder) => {
   builder
-    .addCase(onAction, (state, action) => {
-      state.action.onAction = action.payload;
+    .addCase(fillZone, (state, action) => {
+      state.currentBoard[action.payload.line][action.payload.column] = 1;
     })
-    .addCase(onFill, (state, action) => {
-      state.action.onFill = action.payload;
+    .addCase(crossZone, (state, action) => {
+      state.currentBoard[action.payload.line][action.payload.column] = 2;
     })
-    .addCase(onCross, (state, action) => {
-      state.action.onCross = action.payload;
+    .addCase(emptyZone, (state, action) => {
+      state.currentBoard[action.payload.line][action.payload.column] = 0;
     })
-    .addCase(onEmpty, (state, action) => {
-      state.action.onEmpty = action.payload;
-    });
 });

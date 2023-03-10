@@ -1,15 +1,20 @@
 import React, { useState } from "react";
-// import {clickZone} from "../Board"
+import {clickZone} from "../Board"
 import "../../../styles/zone.css";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
+import { onAction, selectApiAction } from "../ActionButton/redux";
 
 interface Props {
   nb_line: number;
   nb_column: number;
-  clickZone: (setStateZone?:(value: string) => void) => void;
   border_right?: boolean;
 }
 
+//lié className et useSelector currentBoard[properZone]
 const Zone: React.FC<Props> = (props: Props) => {
+  const dispatch = useAppDispatch();
+  const action = useAppSelector(selectApiAction);
+  
   const [classNameState, setClassNameState] = useState(
     "zone zone_empty line_" +
       props.nb_line +
@@ -18,17 +23,13 @@ const Zone: React.FC<Props> = (props: Props) => {
       (props.border_right ? " border_right" : "")
   );
 
-  const changeState = (value:string) => {
-    setClassNameState(value);
-  }
-
   const handleMouseDown = () => {
-    props.clickZone(changeState);
-    window.globalData.REACT_APP_GAME_ON_ACTION = true; //after because like that clickZone+ON_ACTION=false => first zone clicked
+    clickZone();
+    dispatch(onAction(true))
   };
   const handleMouseEnter = () => {
-    if (window.globalData.REACT_APP_GAME_ON_ACTION) {
-      props.clickZone(changeState);
+    if (action.onAction) {
+      clickZone();
     }
   };
 

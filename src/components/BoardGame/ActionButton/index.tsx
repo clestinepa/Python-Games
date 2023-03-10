@@ -1,21 +1,27 @@
 import React, { useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import "../../../styles/action.css";
+import { onCross, onFill, selectApiAction } from "./redux";
 
 const ActionButton: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const action = useAppSelector(selectApiAction);
+
   const [classNameState, setClassNameState] = useState("fill");
   const [valueState, setValueState] = useState("Fill");
 
   const handleClick = () => {
-    if (window.globalData.REACT_APP_GAME_ON_FILL) {
+
+    if (action.onFill) {
       setValueState("Cross");
       setClassNameState("cross");
-      window.globalData.REACT_APP_GAME_ON_FILL = false;
-      window.globalData.REACT_APP_GAME_ON_CROSS = true;
-    } else if (window.globalData.REACT_APP_GAME_ON_CROSS) {
+      dispatch(onFill(false))
+      dispatch(onCross(true))
+    } else if (action.onCross) {
       setValueState("Fill");
       setClassNameState("fill");
-      window.globalData.REACT_APP_GAME_ON_FILL = true;
-      window.globalData.REACT_APP_GAME_ON_CROSS = false;
+      dispatch(onFill(true))
+      dispatch(onCross(false))
     }
   };
 

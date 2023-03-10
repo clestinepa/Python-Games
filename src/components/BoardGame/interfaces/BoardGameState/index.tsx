@@ -1,10 +1,4 @@
 export interface BoardGameState {
-  action: {
-    onAction: boolean;
-    onFill: boolean;
-    onCross: boolean;
-    onEmpty: boolean;
-  };
   level: {
     name: string;
     difficulty: number;
@@ -16,4 +10,13 @@ export interface BoardGameState {
     };
   };
   currentBoard: Array<Array<number>>
+}
+
+export interface ActionState {
+  action: {
+    onAction: boolean;
+    onFill: boolean;
+    onCross: boolean;
+    onEmpty: boolean;
+  };
 }

@@ -1,8 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
+import { actionReducer } from "../components/BoardGame/ActionButton/redux";
 import { boardGameReducer } from "../components/BoardGame/redux";
 
 export const store = configureStore({
   reducer: {
+    actionAPI: actionReducer,
     boardGame: boardGameReducer,
   },
 });

@@ -2,16 +2,16 @@ import React from "react";
 import Clue from "../Clue";
 import "../../../styles/clues.css";
 import { useAppSelector } from "../../../redux/hooks";
+import { selectApiLevel } from "../redux";
 
 
 const CluesColumn: React.FC = () => {
-  const levelSize = useAppSelector((state) => state.boardGame.level.size)
-  const levelCuesColumn = useAppSelector((state) => state.boardGame.level.clues.column)
+  const level = useAppSelector(selectApiLevel)
   const allCluesColumns: Array<Array<JSX.Element>> = [];
 
-  for (let nb_columns = 0; nb_columns < levelSize; nb_columns++) {
+  for (let nb_columns = 0; nb_columns < level.size; nb_columns++) {
     let cluesColumn: Array<JSX.Element> = [];
-    for (let value of levelCuesColumn[nb_columns]) {
+    for (let value of level.clues.column[nb_columns]) {
       cluesColumn.push(<Clue value={value} />);
     }
     allCluesColumns.push(cluesColumn);
@@ -27,7 +27,7 @@ const CluesColumn: React.FC = () => {
             className={
               "container_clues_column" +
               ((index + 1) % 5 === 0
-                ? index + 1 !== levelSize
+                ? index + 1 !== level.size
                   ? " border_right"
                   : ""
                 : "")

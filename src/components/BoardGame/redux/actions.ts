@@ -1,34 +1,28 @@
 import { createAction } from "@reduxjs/toolkit";
 
-export const onAction = createAction(
-  "boardGame/onAction",
-  function prepare(value: boolean) {
+export const fillZone = createAction(
+  "boardGame/fillZone",
+  function prepare(line: number, column: number) {
     return {
-      payload: value,
+      payload: { line, column },
     };
   }
 );
-export const onFill = createAction(
-  "boardGame/onFill",
-  function prepare(value: boolean) {
+
+export const crossZone = createAction(
+  "boardGame/crossZone",
+  function prepare(line: number, column: number) {
     return {
-      payload: value,
+      payload: { line, column },
     };
   }
 );
-export const onCross = createAction(
-  "boardGame/onCross",
-  function prepare(value: boolean) {
+
+export const emptyZone = createAction(
+  "boardGame/emptyZone",
+  function prepare(line: number, column: number) {
     return {
-      payload: value,
-    };
-  }
-);
-export const onEmpty = createAction(
-  "boardGame/onEmpty",
-  function prepare(value: boolean) {
-    return {
-      payload: value,
+      payload: { line, column },
     };
   }
 );
