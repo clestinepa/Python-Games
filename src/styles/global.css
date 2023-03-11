@@ -49,6 +49,7 @@
 }
 
 body {
+  margin : 10px;
   background: var(--color_bg);
 }
 

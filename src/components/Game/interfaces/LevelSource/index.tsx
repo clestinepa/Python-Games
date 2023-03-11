@@ -16,7 +16,7 @@ export interface Action {
   onEmpty: boolean;
 }
 
-export interface classClues {
+export interface ClassClues {
   classGlobal: string;
   classClues: string[];
 }
@@ -24,6 +24,6 @@ export interface classClues {
 export interface Board {
   currentBoard: number[][];
   currentClass: string[][];
-  classCluesLines: classClues[];
-  classCluesColumns: classClues[];
+  classCluesLines: ClassClues[];
+  classCluesColumns: ClassClues[];
 }
