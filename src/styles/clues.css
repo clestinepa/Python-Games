@@ -27,7 +27,6 @@
 
 .clues_column,
 .clues_line {
-  background: var(--color_bg_clues);
   border: var(--size_border_clue) solid var(--color_border_clues);
   border-radius: var(--border_radius);
   font-size: var(--size_font_clue);
@@ -54,11 +53,17 @@
   gap: var(--margin_clue);
 }
 
-.clues_ERROR {
-  /* border: 1px solid red; */
-  background: var(--color_bg_error);
+
+.clues_normal {
+  background: var(--color_bg_clues_normal);
 }
 
 .clues_done {
-  background-color: var(--color_zone);
+  background: var(--color_bg_clues_done);
 }
+
+.clues_ERROR {
+  border: calc(var(--size_border_clue) * 1.5) solid var(--color_border_clues_error);
+  background: var(--color_bg_clues_error);
+}
+

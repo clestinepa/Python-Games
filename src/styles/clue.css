@@ -2,10 +2,14 @@
   color: var(--color_font_clue_normal);
 }
 
+.clue_done {
+  color: var(--color_font_clue_done);
+}
+
 .clue_ERROR {
   color: var(--color_font_clue_error);
 }
 
-.clue_done {
-  color: var(--color_font_clue_done);
+.clue_all_done {
+  color: var(--color_font_clue_all_done);
 }

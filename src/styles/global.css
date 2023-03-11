@@ -11,6 +11,7 @@
   --size_border_board_outside: 4px;
   --size_border_zone: 1px;
   --size_border_clue: 1px;
+  --size_border_clue_error: 2px;
 
   --size_font_clue: calc(var(--size_zone) / 2);
   --margin_clue: calc(var(--size_zone) / 10);
@@ -18,19 +19,33 @@
   --size_clues_short: calc(var(--margin_clue) * 7);
   --border_radius: calc(var(--size_zone) / 6);
 
-  --color_border_board: black;
-  --color_border_clues: gray;
-  --color_border_zone: lightgray;
-  --color_border_zone_hover: var(--color_zone_fill);
-  --color_bg_clues: lightslategray;
-  --color_bg: lightblue;
-  --color_bg_clue_error: indianred;
-  --color_zone_empty: aliceblue;
-  --color_zone_fill: darkblue;
-  --color_zone_cross: lightgray;
-  --color_font_clue_normal: var(--color_zone_empty);
-  --color_font_clue_error: var(--color_zone_empty);
-  --color_font_clue_done: rgb(200, 200, 200);
+  --white: #fff;
+  --dark: #5e748a;
+  --light: #f0f6ff;
+  --medium: #a7bfd7;
+  --main: #6AA4DD;
+  --complementary : #cd5c5c;
+
+  --color_bg: var(--white);
+
+  --color_zone_empty: var(--white);
+  --color_zone_fill: var(--main);
+  --color_zone_cross: var(--medium);
+
+  --color_bg_clues_normal: var(--medium);
+  --color_bg_clues_done: var(--white);
+  --color_bg_clues_error: var(--medium);
+
+  --color_font_clue_normal: var(--dark);
+  --color_font_clue_done: var(--light);
+  --color_font_clue_error: var(--complementary);
+  --color_font_clue_all_done: var(--medium);
+
+  --color_border_board: var(--dark);
+  --color_border_clues: var(--medium);
+  --color_border_clues_error: var(--complementary);
+  --color_border_zone: var(--light);
+  --color_border_zone_hover: var(--main);
 }
 
 body {

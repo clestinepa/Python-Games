@@ -37,27 +37,19 @@ const Zone: React.FC<Props> = (props: Props) => {
 
   const clickZone = () => {
     let new_action = action;
-    console.log("current action", new_action)
-
     let new_zone = board.currentBoard[props.nb_line][props.nb_column];
     if (new_action.onFill) {
-      console.log("je veux FILL");
       if (new_zone === 1) {
-        console.log("already !");
-
         //if already fill
         if (!new_action.onAction) {
-          console.log("je vais donc EMPTY");
           //only the first zone define if its an empty action or not
           new_action = { ...new_action, onEmpty: true };
         }
         if (new_action.onEmpty) {
-          console.log("EMPTY");
           new_zone = 0;
         }
       } else {
         if (!new_action.onEmpty) {
-          console.log("FILL");
           new_zone = 1;
         }
       }
@@ -77,7 +69,6 @@ const Zone: React.FC<Props> = (props: Props) => {
         }
       }
     }
-    console.log("new action", new_action)
     dispatch(updateZone(props.nb_line, props.nb_column, new_zone));
     return new_action;
   };

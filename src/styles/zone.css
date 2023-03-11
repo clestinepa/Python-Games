@@ -9,13 +9,13 @@
 }
 
 .zone_empty {
-  background-color: var(--color_zone_empty);
+  background: var(--color_zone_empty);
 }
 
 .zone_fill {
-  background-color: var(--color_zone_fill);
+  background: var(--color_zone_fill);
 }
 
 .zone_cross {
-  background-color: var(--color_zone_cross);
+  background: var(--color_zone_cross);
 }
