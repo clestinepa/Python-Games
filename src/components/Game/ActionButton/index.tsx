@@ -1,7 +1,7 @@
 import React from "react";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import "../../../styles/action.css";
-import { onCross, onFill, selectApiAction } from "./redux";
+import { selectApiAction, updateAction } from "./redux";
 
 const ActionButton: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -18,12 +18,16 @@ const ActionButton: React.FC = () => {
 
     if (action.onFill) {
       setActionButtonState({class:"cross", text:"Cross"});
-      dispatch(onFill(false))
-      dispatch(onCross(true))
+      let new_action = action;
+      new_action = { ...new_action, onFill: false, onCross:true };
+      dispatch(updateAction(new_action));
+
     } else if (action.onCross) {
       setActionButtonState({class:"fill", text:"Fill"});
-      dispatch(onFill(true))
-      dispatch(onCross(false))
+      let new_action = action;
+      new_action = { ...new_action, onFill: true, onCross:false };
+      dispatch(updateAction(new_action));
+
     }
   };
 

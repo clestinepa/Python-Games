@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { actionReducer } from "../components/Level/ActionButton/redux";
-import { levelReducer } from "../components/Level/redux";
+import { actionReducer } from "../components/Game/ActionButton/redux";
+import { gameReducer } from "../components/Game/redux";
+import { settingsReducer } from "./settings";
 
 export const store = configureStore({
   reducer: {
     actionAPI: actionReducer,
-    levelAPI: levelReducer,
+    settingsAPI : settingsReducer,
+    gameAPI: gameReducer,
   },
 });
 

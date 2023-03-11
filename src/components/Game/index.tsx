@@ -27,7 +27,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
  *      * clue_ERROR / clue_done / clue_normal
  */
 
-const Level: React.FC = () => {
+const Game: React.FC = () => {
   const dispatch = useAppDispatch();
   const level = useAppSelector(selectApiLevel);
   dispatch(initialBoard(level));
@@ -46,4 +46,4 @@ const Level: React.FC = () => {
   );
 };
 
-export default Level;
+export default Game;
