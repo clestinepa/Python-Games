@@ -13,3 +13,10 @@ export interface classClues {
   classGlobal : string;
   classClues : string[];
 }
+
+export interface Board {
+    currentBoard: number[][];
+    currentClass: string[][];  
+    classCluesLines: classClues[];
+    classCluesColumns: classClues[];
+}

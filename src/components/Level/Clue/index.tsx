@@ -1,7 +1,6 @@
 import { useAppSelector } from "../../../redux/hooks";
 import "../../../styles/clue.css";
-import { selectApiCluesColumns } from "../CluesColumns/redux";
-import { selectApiCluesLines } from "../CluesLines/redux";
+import { selectApiBoard } from "../redux";
 
 export enum ClueType {
   Line,
@@ -17,9 +16,9 @@ interface Props {
 }
 
 const Clue: React.FC<Props> = (props: Props) => {
-  const classCluesColumns = useAppSelector(selectApiCluesColumns);
-  const classCluesLines = useAppSelector(selectApiCluesLines);
-  let classList = ( props.type === ClueType.Column ? classCluesColumns[props.nb_column!] : classCluesLines[props.nb_line!]).classClues
+  const board = useAppSelector(selectApiBoard);
+
+  let classList = ( props.type === ClueType.Column ? board.classCluesColumns[props.nb_column!] : board.classCluesLines[props.nb_line!]).classClues
 
   return (
     <p

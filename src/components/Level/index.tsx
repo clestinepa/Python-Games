@@ -3,6 +3,8 @@ import CluesLines from "./CluesLines";
 import Board from "./Board";
 import ActionButton from "./ActionButton";
 import "../../styles/board.css";
+import { initialBoard, selectApiLevel } from "./redux";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 
 /** Detail des elements
  * ZONE : id=line_.._column_..
@@ -26,6 +28,10 @@ import "../../styles/board.css";
  */
 
 const Level: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const level = useAppSelector(selectApiLevel);
+  dispatch(initialBoard(level));
+  
   return (
     <div id="board_game">
       <div id="board_with_all_clues">

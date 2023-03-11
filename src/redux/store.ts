@@ -1,17 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { actionReducer } from "../components/Level/ActionButton/redux";
-import { boardReducer } from "../components/Level/Board/redux";
-import { cluesColumnsReducer } from "../components/Level/CluesColumns/redux";
-import { cluesLinesReducer } from "../components/Level/CluesLines/redux";
 import { levelReducer } from "../components/Level/redux";
 
 export const store = configureStore({
   reducer: {
     actionAPI: actionReducer,
     levelAPI: levelReducer,
-    boardAPI: boardReducer,
-    cluesColumnsAPI: cluesColumnsReducer,
-    cluesLinesAPI: cluesLinesReducer,
   },
 });
 
