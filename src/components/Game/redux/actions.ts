@@ -27,6 +27,12 @@ export const updateZone = createAction("board/updateZone", function prepare(line
   };
 });
 
+export const updateZonesLine = createAction("board/updateZonesLine", function prepare(line: number, new_zones_line: number[]) {
+  return {
+    payload: { line, new_zones_line },
+  };
+});
+
 // function autoCrossLine(nb_line) {
 //   currentBoard[nb_line] = currentBoard[nb_line].map(function (v) { return v == 0 ? 2 : v });
 //   for (let zone of zones) {

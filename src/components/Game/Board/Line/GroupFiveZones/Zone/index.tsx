@@ -17,7 +17,7 @@ const Zone: React.FC<Props> = (props: Props) => {
   const level = useAppSelector(selectApiLevel);
 
   const handleMouseDown = () => {
-    let new_action = clickZone();;
+    let new_action = clickZone();
     new_action = { ...new_action, onAction: true };
     dispatch(updateAction(new_action));
   };
@@ -74,7 +74,7 @@ const Zone: React.FC<Props> = (props: Props) => {
   };
 
   React.useEffect(() => {
-    ConstraintManagement.checkConstraint(props.nb_line, level, board, dispatch);
+    ConstraintManagement.checkConstraints(props.nb_line, level, board, dispatch);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [board.currentBoard[props.nb_line][props.nb_column]]);
@@ -84,7 +84,20 @@ const Zone: React.FC<Props> = (props: Props) => {
       onMouseDown={() => handleMouseDown()}
       onMouseEnter={() => handleMouseEnter()}
       id={"line_" + props.nb_line + "_column_" + props.nb_column}
-      className={"zone " + board.currentClass[props.nb_line][props.nb_column] + " line_" + props.nb_line + " column_" + props.nb_column}
+      className={
+        "zone " +
+        (board.currentBoard[props.nb_line][props.nb_column] === 0
+          ? "zone_empty"
+          : board.currentBoard[props.nb_line][props.nb_column] === 1
+          ? "zone_fill"
+          : board.currentBoard[props.nb_line][props.nb_column] === 2
+          ? "zone_cross"
+          : "") +
+        " line_" +
+        props.nb_line +
+        " column_" +
+        props.nb_column
+      }
       draggable={false}></button>
   );
 };

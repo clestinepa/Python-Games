@@ -23,7 +23,6 @@ export interface ClassClues {
 
 export interface Board {
   currentBoard: number[][];
-  currentClass: string[][];
   classCluesLines: ClassClues[];
   classCluesColumns: ClassClues[];
 }
