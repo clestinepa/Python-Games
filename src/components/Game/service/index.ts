@@ -19,11 +19,19 @@ const ConstraintManagement = {
 
     //check the validity of the areas
     let clues = level.clues.line[nb_line];
+    let sum_zone_fill = 0 ;
+    for (let area of areas) {
+      sum_zone_fill += area;
+    }
     //areas === clues => all done
     if (areas.toString() === clues.toString()) {
       new_clues_line = ConstraintManagement._updateLineDone(new_clues_line);
       ConstraintManagement._updateLineDone(new_clues_line);
       new_zones_line = ConstraintManagement._autoCrossLine(new_zones_line, nb_line, board);
+    }
+    //too much "validate" areas => fail
+    else if (areas.length > clues.length && nb_cross ===(level.size - sum_zone_fill)) {
+      new_clues_line.classGlobal = "clues_ERROR";
     }
     //not perfect areas => check Areas
     else if (areas.length !== 0) {
@@ -90,8 +98,11 @@ const ConstraintManagement = {
         if (onCheck) {
           new_clues_line = ConstraintManagement._checkAreaEndByEmpty(new_clues_line, areas, clues, nb_check, true);
         }
+        //if there is too much area but all the clues are already used => fail
+        if (areas.length > clues.length && ConstraintManagement._checkExtraArea(new_clues_line)) {
+          new_clues_line.classGlobal = "clues_ERROR";
+        }
         //we can't continue here so that means we finish !
-        //si tout les clues sont trait mais qu'il reste des areas => fail
         console.log("end Check");
         break;
       } else if (zone === 1) {
@@ -133,6 +144,17 @@ const ConstraintManagement = {
       }
     }
     return { areas, nb_cross };
+  },
+
+  _checkExtraArea: (new_clues_line: ClassClues) => {
+    let clues_all_done = true;
+    for (let clue of new_clues_line.classClues) {
+      if (clue !== "clue_done") {
+        clues_all_done = false;
+        break;
+      }
+    }
+    return clues_all_done;
   },
 
   _checkAreaEndByEmpty: (new_clues_line: ClassClues, areas: number[], clues: number[], nb_check: number, reverse: boolean) => {
@@ -215,7 +237,6 @@ const ConstraintManagement = {
   },
 
   _autoCrossLine: (new_zones_line: number[], nb_line: number, board: Board) => {
-    console.log(new_zones_line);
     let new_zones: number[] = Object.assign([], new_zones_line);
     for (let nb_zone = 0; nb_zone < new_zones.length; nb_zone++) {
       if (new_zones[nb_zone] === 0) {
@@ -223,8 +244,6 @@ const ConstraintManagement = {
       }
     }
     new_zones_line = new_zones;
-    // new_zones_line.map(function (v) { return v === 0 ? 2 : v });
-    console.log(new_zones_line);
     return new_zones_line;
   },
 };
