@@ -74,7 +74,7 @@ const Zone: React.FC<Props> = (props: Props) => {
   };
 
   React.useEffect(() => {
-    ConstraintManagement.checkConstraints(props.nb_line, level, board, dispatch);
+    ConstraintManagement.checkConstraints(props.nb_line,props.nb_column, level, board, dispatch);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [board.currentBoard[props.nb_line][props.nb_column]]);

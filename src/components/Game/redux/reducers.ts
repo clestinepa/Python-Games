@@ -1,6 +1,6 @@
 import { createReducer } from "@reduxjs/toolkit";
 import { GameState } from "../interfaces/LevelState";
-import { initialBoard, setNameLevel, updateClue, updateCluesLine, updateZone, updateZonesLine } from "./actions";
+import { initialBoard, setNameLevel, updateCluesColumn, updateCluesLine, updateZone, updateZonesColumn, updateZonesLine } from "./actions";
 
 const initialState: GameState = {
   level: {
@@ -53,17 +53,21 @@ export const gameReducer = createReducer(initialState, (builder) => {
         });
       }
     })
+    .addCase(updateZone, (state, action) => {
+      state.board.currentBoard[action.payload.nb_line][action.payload.column] = action.payload.new_zone;
+    })
     .addCase(updateCluesLine, (state, action) => {
       state.board.classCluesLines[action.payload.nb_line] = action.payload.new_clues_line;
     })
-    .addCase(updateClue, (state, action) => {
-        state.board.classCluesLines[action.payload.nb_line].classClues[action.payload.index] = action.payload.new_clue;
-    })
-    .addCase(updateZone, (state, action) => {
-      state.board.currentBoard[action.payload.line][action.payload.column] = action.payload.new_zone;
+    .addCase(updateCluesColumn, (state, action) => {
+      state.board.classCluesColumns[action.payload.nb_column] = action.payload.new_clues_column;
     })
     .addCase(updateZonesLine, (state, action) => {
-      state.board.currentBoard[action.payload.line] = action.payload.new_zones_line;
+      state.board.currentBoard[action.payload.nb_line] = action.payload.new_zones_line;
+    })
+    .addCase(updateZonesColumn, (state, action) => {
+      for (let nb_line = 0 ; nb_line < state.board.currentBoard.length ; nb_line++) {
+        state.board.currentBoard[nb_line][action.payload.nb_column] = action.payload.new_zones_column[nb_line]
+      }
     });
-
 });

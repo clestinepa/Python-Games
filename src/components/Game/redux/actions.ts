@@ -17,32 +17,24 @@ export const updateCluesLine = createAction("cluesLines/updateCluesLine", functi
   return { payload: { nb_line, new_clues_line } };
 });
 
-export const updateClue = createAction("cluesLines/updateClue", function prepare(nb_line: number, index: number, new_clue: string) {
-  return { payload: { nb_line, index, new_clue } };
+export const updateCluesColumn = createAction("cluesColumns/updateCluesColumn", function prepare(nb_column: number, new_clues_column: ClassClues) {
+  return { payload: { nb_column, new_clues_column } };
 });
 
-export const updateZone = createAction("board/updateZone", function prepare(line: number, column: number, new_zone: number) {
+export const updateZone = createAction("board/updateZone", function prepare(nb_line: number, column: number, new_zone: number) {
   return {
-    payload: { line, column, new_zone },
+    payload: { nb_line, column, new_zone },
   };
 });
 
-export const updateZonesLine = createAction("board/updateZonesLine", function prepare(line: number, new_zones_line: number[]) {
+export const updateZonesLine = createAction("board/updateZonesLine", function prepare(nb_line: number, new_zones_line: number[]) {
   return {
-    payload: { line, new_zones_line },
+    payload: { nb_line, new_zones_line },
   };
 });
 
-// function autoCrossLine(nb_line) {
-//   currentBoard[nb_line] = currentBoard[nb_line].map(function (v) { return v == 0 ? 2 : v });
-//   for (let zone of zones) {
-//     if (parseInt(zone.classList[2].replace("line_", "")) == nb_line && zone.classList[1] == "zone_empty") {
-//       zone.className = zone.className.replace("zone_empty", "zone_cross");
-//     }
-//   }
-// }
-
-// /**TODO */
-// function autoCrossZone(nb_line) {
-//   console.log("to do")
-// }
+export const updateZonesColumn = createAction("board/updateZonesColumn", function prepare(nb_column: number, new_zones_column: number[]) {
+  return {
+    payload: { nb_column, new_zones_column },
+  };
+});
