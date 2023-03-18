@@ -14,6 +14,7 @@ const initialState: GameState = {
     },
   },
   board: {
+    currentFill: 0,
     currentBoard: [],
     classCluesLines: [],
     classCluesColumns: [],
@@ -54,6 +55,11 @@ export const gameReducer = createReducer(initialState, (builder) => {
       }
     })
     .addCase(updateZone, (state, action) => {
+      if (state.board.currentBoard[action.payload.nb_line][action.payload.column] !== 1) {
+        if (action.payload.new_zone === 1) state.board.currentFill++;
+      } else {
+        if (action.payload.new_zone !== 1) state.board.currentFill--;
+      }
       state.board.currentBoard[action.payload.nb_line][action.payload.column] = action.payload.new_zone;
     })
     .addCase(updateCluesLine, (state, action) => {
@@ -66,8 +72,8 @@ export const gameReducer = createReducer(initialState, (builder) => {
       state.board.currentBoard[action.payload.nb_line] = action.payload.new_zones_line;
     })
     .addCase(updateZonesColumn, (state, action) => {
-      for (let nb_line = 0 ; nb_line < state.board.currentBoard.length ; nb_line++) {
-        state.board.currentBoard[nb_line][action.payload.nb_column] = action.payload.new_zones_column[nb_line]
+      for (let nb_line = 0; nb_line < state.board.currentBoard.length; nb_line++) {
+        state.board.currentBoard[nb_line][action.payload.nb_column] = action.payload.new_zones_column[nb_line];
       }
     });
 });

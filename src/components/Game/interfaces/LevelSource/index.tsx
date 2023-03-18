@@ -22,6 +22,7 @@ export interface ClassClues {
 }
 
 export interface Board {
+  currentFill: number;
   currentBoard: number[][];
   classCluesLines: ClassClues[];
   classCluesColumns: ClassClues[];
