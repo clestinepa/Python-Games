@@ -1,0 +1,11 @@
+#alert_count {
+  margin: auto;
+}
+
+.alert_hidden {
+  color: white;
+}
+
+.alert_shown {
+    color: red;
+  }

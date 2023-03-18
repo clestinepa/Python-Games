@@ -55,10 +55,16 @@ export const gameReducer = createReducer(initialState, (builder) => {
       }
     })
     .addCase(updateZone, (state, action) => {
-      if (state.board.currentBoard[action.payload.nb_line][action.payload.column] !== 1) {
-        if (action.payload.new_zone === 1) state.board.currentFill++;
-      } else {
-        if (action.payload.new_zone !== 1) state.board.currentFill--;
+      document.getElementById("alert_count")!.className = document.getElementById("alert_count")!.className.replace("alert_shown", "alert_hidden");
+      if (state.board.currentBoard[action.payload.nb_line][action.payload.column] !== 1 && action.payload.new_zone === 1) {
+        if (state.board.currentFill + 1 > state.level.nb_fill) {
+          document.getElementById("alert_count")!.className = document.getElementById("alert_count")!.className.replace("alert_hidden", "alert_shown");
+          return;
+        } else {
+          state.board.currentFill++;
+        }
+      } else if (state.board.currentBoard[action.payload.nb_line][action.payload.column] === 1 && action.payload.new_zone !== 1) {
+        state.board.currentFill--;
       }
       state.board.currentBoard[action.payload.nb_line][action.payload.column] = action.payload.new_zone;
     })
