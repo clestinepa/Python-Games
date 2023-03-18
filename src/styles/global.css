@@ -56,6 +56,5 @@ body {
 ul,
 li {
   display: flex;
-  width: fit-content;
   align-items: center;
 }

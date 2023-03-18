@@ -1,25 +1,28 @@
 #clues_lines {
   flex-direction: column;
-  margin: var(--size_border_board_outside) 0;
+  padding: var(--size_border_board_outside) 0;
+  align-items: stretch;
+
 }
 
 #clues_columns {
-  padding-left: calc(var(--size_clues_long) + var(--margin_clue) * 2);
-  width: 100%;
-  margin: 0 var(--size_border_board_outside);
+  justify-content: right;
+  padding: 0 var(--size_border_board_outside);
+  align-items: stretch;
 }
 
 .container_clues_line {
   height: var(--size_zone);
+  padding: 0 var(--margin_clue);
 }
-
 .container_clues_line.border_bottom {
   height: calc(var(--size_zone) + var(--size_border_board_inside));
 }
 
 .container_clues_column {
+  flex-direction: column;
   width: var(--size_zone);
-  justify-content: center;
+  padding: var(--margin_clue) 0;
 }
 .container_clues_column.border_right {
   width: calc(var(--size_zone) + var(--size_border_board_inside));
@@ -27,28 +30,31 @@
 
 .clues_column,
 .clues_line {
+  flex-grow: 1;
+
   border: var(--size_border_clue) solid var(--color_border_clues);
   border-radius: var(--border_radius);
-  font-size: var(--size_font_clue);
 
   display: flex;
   align-items: center;
 }
 
 .clues_column {
-  height: var(--size_clues_long);
+  min-height: var(--size_clues_long);
+  height: fit-content;
   width: var(--size_clues_short);
+  
   padding: var(--margin_clue) 0;
-  margin: var(--margin_clue) 0;
   flex-direction: column;
   justify-content: end;
 }
 
 .clues_line {
   height: var(--size_clues_short);
-  width: var(--size_clues_long);
+  min-width: var(--size_clues_long);
+  width: fit-content;
+
   padding: 0 var(--margin_clue);
-  margin: 0 var(--margin_clue);
   justify-content: right;
   gap: var(--margin_clue);
 }

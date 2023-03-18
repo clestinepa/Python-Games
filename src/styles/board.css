@@ -1,5 +1,6 @@
 #board_with_all_clues {
   width: fit-content;
+  margin: auto;
 }
 
 #board_with_clues_line {

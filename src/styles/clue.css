@@ -1,3 +1,8 @@
+.clue {
+  font-size: var(--size_font_clue);
+  height: var(--size_font_clue);
+}
+
 .clue_normal {
   color: var(--color_font_clue_normal);
 }

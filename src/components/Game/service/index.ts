@@ -126,7 +126,6 @@ const ConstraintManagement = {
           new_clues.classGlobal = "clues_ERROR";
         }
         //we can't continue here so that means we finish !
-        console.log("end Check");
         break;
       } else if (zone === 1) {
         //we find a new area to check
@@ -206,7 +205,6 @@ const ConstraintManagement = {
     let onArea = false;
     for (let line of board.currentBoard) {
       let zone = line[nb_column];
-      console.log(zone);
       if (zone === 1) {
         if (!onArea) {
           onArea = true;
