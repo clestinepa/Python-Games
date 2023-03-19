@@ -16,6 +16,8 @@ const Zone: React.FC<Props> = (props: Props) => {
   const board = useAppSelector(selectApiBoard);
   const level = useAppSelector(selectApiLevel);
 
+  const [zoneState, setZoneState] = React.useState(false);
+
   const handleMouseDown = () => {
     let new_action = clickZone();
     new_action = { ...new_action, onAction: true };
@@ -36,6 +38,7 @@ const Zone: React.FC<Props> = (props: Props) => {
   };
 
   const clickZone = () => {
+    setZoneState(true);
     let new_action = action;
     let new_zone = board.currentBoard[props.nb_line][props.nb_column];
     if (new_action.onFill) {
@@ -74,8 +77,10 @@ const Zone: React.FC<Props> = (props: Props) => {
   };
 
   React.useEffect(() => {
-    ConstraintManagement.checkConstraints(props.nb_line,props.nb_column, level, board, dispatch);
-
+    if (zoneState) {
+      ConstraintManagement.checkConstraints(props.nb_line, props.nb_column, level, board, dispatch);
+      setZoneState(false);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [board.currentBoard[props.nb_line][props.nb_column]]);
 

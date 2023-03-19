@@ -21,9 +21,9 @@ export const updateCluesColumn = createAction("cluesColumns/updateCluesColumn", 
   return { payload: { nb_column, new_clues_column } };
 });
 
-export const updateZone = createAction("board/updateZone", function prepare(nb_line: number, column: number, new_zone: number) {
+export const updateZone = createAction("board/updateZone", function prepare(nb_line: number, nb_column: number, new_zone: number) {
   return {
-    payload: { nb_line, column, new_zone },
+    payload: { nb_line, nb_column, new_zone },
   };
 });
 
@@ -38,3 +38,19 @@ export const updateZonesColumn = createAction("board/updateZonesColumn", functio
     payload: { nb_column, new_zones_column },
   };
 });
+
+export const updateLastAction = createAction(
+  "pastActions/updateLastAction",
+  function prepare(
+    autoCrossedLine: boolean,
+    pastZonesLine: number[],
+    newZonesLine: number[],
+    autoCrossedColumn: boolean,
+    pastZonesColumn: number[],
+    newZonesColumn: number[]
+  ) {
+    return {
+      payload: {autoCrossedLine, pastZonesLine, newZonesLine, autoCrossedColumn, pastZonesColumn, newZonesColumn },
+    };
+  }
+);

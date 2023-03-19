@@ -1,6 +1,16 @@
 import { createReducer } from "@reduxjs/toolkit";
+import { PastAction } from "../interfaces/LevelSource";
 import { GameState } from "../interfaces/LevelState";
-import { initialBoard, setNameLevel, updateCluesColumn, updateCluesLine, updateZone, updateZonesColumn, updateZonesLine } from "./actions";
+import {
+  initialBoard,
+  setNameLevel,
+  updateCluesColumn,
+  updateCluesLine,
+  updateLastAction,
+  updateZone,
+  updateZonesColumn,
+  updateZonesLine,
+} from "./actions";
 
 const initialState: GameState = {
   level: {
@@ -19,6 +29,7 @@ const initialState: GameState = {
     classCluesLines: [],
     classCluesColumns: [],
   },
+  pastActions: [],
 };
 
 export const gameReducer = createReducer(initialState, (builder) => {
@@ -56,17 +67,32 @@ export const gameReducer = createReducer(initialState, (builder) => {
     })
     .addCase(updateZone, (state, action) => {
       document.getElementById("alert_count")!.className = document.getElementById("alert_count")!.className.replace("alert_shown", "alert_hidden");
-      if (state.board.currentBoard[action.payload.nb_line][action.payload.column] !== 1 && action.payload.new_zone === 1) {
+      if (state.board.currentBoard[action.payload.nb_line][action.payload.nb_column] !== 1 && action.payload.new_zone === 1) {
         if (state.board.currentFill + 1 > state.level.nb_fill) {
-          document.getElementById("alert_count")!.className = document.getElementById("alert_count")!.className.replace("alert_hidden", "alert_shown");
+          document.getElementById("alert_count")!.className = document
+            .getElementById("alert_count")!
+            .className.replace("alert_hidden", "alert_shown");
           return;
         } else {
           state.board.currentFill++;
         }
-      } else if (state.board.currentBoard[action.payload.nb_line][action.payload.column] === 1 && action.payload.new_zone !== 1) {
+      } else if (state.board.currentBoard[action.payload.nb_line][action.payload.nb_column] === 1 && action.payload.new_zone !== 1) {
         state.board.currentFill--;
       }
-      state.board.currentBoard[action.payload.nb_line][action.payload.column] = action.payload.new_zone;
+      let lastAction: PastAction = {
+        nb_line: action.payload.nb_line,
+        nb_column: action.payload.nb_column,
+        pastZone: state.board.currentBoard[action.payload.nb_line][action.payload.nb_column],
+        newZone: action.payload.new_zone,
+        autoCrossedLine: false,
+        pastZonesLine: [],
+        newZonesLine: [],
+        autoCrossedColumn: false,
+        pastZonesColumn:[],
+        newZonesColumn: [],
+      };
+      state.pastActions.push(lastAction);
+      state.board.currentBoard[action.payload.nb_line][action.payload.nb_column] = action.payload.new_zone;
     })
     .addCase(updateCluesLine, (state, action) => {
       state.board.classCluesLines[action.payload.nb_line] = action.payload.new_clues_line;
@@ -81,5 +107,16 @@ export const gameReducer = createReducer(initialState, (builder) => {
       for (let nb_line = 0; nb_line < state.board.currentBoard.length; nb_line++) {
         state.board.currentBoard[nb_line][action.payload.nb_column] = action.payload.new_zones_column[nb_line];
       }
+    })
+    .addCase(updateLastAction, (state, action) => {
+      if (state.pastActions[0]) {
+        state.pastActions[state.pastActions.length - 1].autoCrossedLine = action.payload.autoCrossedLine
+        state.pastActions[state.pastActions.length - 1].pastZonesLine = action.payload.pastZonesLine
+        state.pastActions[state.pastActions.length - 1].newZonesLine = action.payload.newZonesLine
+        state.pastActions[state.pastActions.length - 1].autoCrossedColumn = action.payload.autoCrossedColumn
+        state.pastActions[state.pastActions.length - 1].pastZonesColumn = action.payload.pastZonesColumn
+        state.pastActions[state.pastActions.length - 1].newZonesColumn = action.payload.newZonesColumn
+      }
+    
     });
 });

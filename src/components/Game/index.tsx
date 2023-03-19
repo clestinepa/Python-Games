@@ -6,6 +6,7 @@ import "../../styles/board.css";
 import { initialBoard, selectApiLevel } from "./redux";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import Count from "./Count";
+import UndoButton from "./UndoButton";
 
 /** Detail des elements
  * ZONE : id=line_.._column_..
@@ -44,6 +45,7 @@ const Game: React.FC = () => {
         </div>
       </div>
       <ActionButton />
+      <UndoButton />
     </div>
   );
 };

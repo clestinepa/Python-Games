@@ -1,26 +1,54 @@
 import { AnyAction, ThunkDispatch } from "@reduxjs/toolkit";
-import { ClueType } from "../Clue";
-import { Level, Board, ClassClues } from "../interfaces/LevelSource";
-import { updateCluesColumn, updateCluesLine, updateZonesColumn, updateZonesLine } from "../redux";
+import { Level, Board, ClassClues, CluesType } from "../interfaces/LevelSource";
+import { updateCluesColumn, updateCluesLine, updateLastAction, updateZonesColumn, updateZonesLine } from "../redux";
 
 const ConstraintManagement = {
   checkConstraints: (nb_line: number, nb_column: number, level: Level, board: Board, dispatch: ThunkDispatch<any, undefined, AnyAction>) => {
-    let new_value_line = { new_clues_line: Object.assign({}, board.classCluesLines[nb_line]), new_zones_line: [...board.currentBoard[nb_line]] };
-    new_value_line = ConstraintManagement._checkLineConstraints(new_value_line.new_clues_line, new_value_line.new_zones_line, nb_line, level, board);
-    dispatch(updateCluesLine(nb_line, new_value_line.new_clues_line));
-    dispatch(updateZonesLine(nb_line, new_value_line.new_zones_line));
+    let past_value_line = {
+      clues_line: Object.assign({}, board.classCluesLines[nb_line]),
+      zones_line: [...board.currentBoard[nb_line]],
+      autoCrossed: false,
+    };
+    let new_value_line = past_value_line;
+    new_value_line = ConstraintManagement._checkLineConstraints(new_value_line.clues_line, new_value_line.zones_line, nb_line, level, board);
+    dispatch(updateCluesLine(nb_line, new_value_line.clues_line));
+    dispatch(updateZonesLine(nb_line, new_value_line.zones_line));
 
     let new_zones_column: number[] = [];
     for (let line of board.currentBoard) {
       new_zones_column.push(line[nb_column]);
     }
-    let new_value_column = { new_clues_column: Object.assign({}, board.classCluesColumns[nb_column]), new_zones_column: new_zones_column };
-    new_value_column = ConstraintManagement._checkColumnConstraints(new_value_column.new_clues_column, new_value_column.new_zones_column, nb_column, level, board);
-    dispatch(updateCluesColumn(nb_column, new_value_column.new_clues_column));
-    dispatch(updateZonesColumn(nb_column, new_value_column.new_zones_column));
+    let past_value_column = {
+      clues_column: Object.assign({}, board.classCluesColumns[nb_column]),
+      zones_column: new_zones_column,
+      autoCrossed: false,
+    };
+    let new_value_column = past_value_column;
+    new_value_column = ConstraintManagement._checkColumnConstraints(
+      new_value_column.clues_column,
+      new_value_column.zones_column,
+      nb_column,
+      level,
+      board
+    );
+    dispatch(updateCluesColumn(nb_column, new_value_column.clues_column));
+    dispatch(updateZonesColumn(nb_column, new_value_column.zones_column));
+
+    console.log("l", new_value_line.autoCrossed, "c", new_value_column.autoCrossed)
+    dispatch(
+      updateLastAction(
+        new_value_line.autoCrossed,
+        past_value_line.zones_line,
+        new_value_line.zones_line,
+        new_value_column.autoCrossed,
+        past_value_column.zones_column,
+        new_value_column.zones_column
+      )
+    );
   },
 
   _checkLineConstraints: (new_clues_line: ClassClues, new_zones_line: number[], nb_line: number, level: Level, board: Board) => {
+    let autoCrossed = false;
     new_clues_line = ConstraintManagement._updateCluesNormal(new_clues_line);
 
     //build the areas
@@ -36,6 +64,7 @@ const ConstraintManagement = {
     if (areas.toString() === clues.toString()) {
       new_clues_line = ConstraintManagement._updateCluesDone(new_clues_line);
       new_zones_line = ConstraintManagement._autoCross(new_zones_line);
+      autoCrossed = true;
     }
     //too much "validate" areas => fail
     else if (areas.length > clues.length && nb_cross === level.size - sum_zone_fill) {
@@ -43,19 +72,19 @@ const ConstraintManagement = {
     }
     //not perfect areas => check Areas
     else if (areas.length !== 0) {
-      new_clues_line = ConstraintManagement._checkValidityAreasStartLeft(ClueType.Line, new_clues_line, areas, nb_line, level, board);
+      new_clues_line = ConstraintManagement._checkValidityAreasStartLeft(CluesType.Line, new_clues_line, areas, nb_line, level, board);
     }
     //all zones are crossed => fail
     else if (areas.length === 0 && nb_cross === level.size) {
       new_clues_line.classGlobal = "clues_ERROR";
     }
-    return { new_clues_line, new_zones_line };
+    return { clues_line: new_clues_line, zones_line: new_zones_line, autoCrossed: autoCrossed };
   },
 
-  _checkValidityAreasStartLeft: (type: ClueType, new_clues: ClassClues, areas: number[], index: number, level: Level, board: Board) => {
-    let clues = type === ClueType.Line ? [...level.clues.line[index]] : [...level.clues.column[index]];
+  _checkValidityAreasStartLeft: (type: CluesType, new_clues: ClassClues, areas: number[], index: number, level: Level, board: Board) => {
+    let clues = type === CluesType.Line ? [...level.clues.line[index]] : [...level.clues.column[index]];
     let line_to_check: number[] = [];
-    if (type === ClueType.Line) {
+    if (type === CluesType.Line) {
       line_to_check = [...board.currentBoard[index]];
     } else {
       for (let line of board.currentBoard) {
@@ -100,10 +129,10 @@ const ConstraintManagement = {
     return new_clues;
   },
 
-  _checkValidityAreasStartRight: (type: ClueType, new_clues: ClassClues, areas: number[], index: number, level: Level, board: Board) => {
-    let clues = type === ClueType.Line ? [...level.clues.line[index]].reverse() : [...level.clues.column[index]].reverse();
+  _checkValidityAreasStartRight: (type: CluesType, new_clues: ClassClues, areas: number[], index: number, level: Level, board: Board) => {
+    let clues = type === CluesType.Line ? [...level.clues.line[index]].reverse() : [...level.clues.column[index]].reverse();
     let line_to_check: number[] = [];
-    if (type === ClueType.Line) {
+    if (type === CluesType.Line) {
       line_to_check = [...board.currentBoard[index]].reverse();
     } else {
       for (let line of board.currentBoard) {
@@ -146,6 +175,7 @@ const ConstraintManagement = {
   },
 
   _checkColumnConstraints: (new_clues_column: ClassClues, new_zones_column: number[], nb_column: number, level: Level, board: Board) => {
+    let autoCrossed = false;
     new_clues_column = ConstraintManagement._updateCluesNormal(new_clues_column);
     //build the areas
     let { areas, nb_cross } = ConstraintManagement._buildAreasColumn(nb_column, board);
@@ -160,6 +190,7 @@ const ConstraintManagement = {
     if (areas.toString() === clues.toString()) {
       new_clues_column = ConstraintManagement._updateCluesDone(new_clues_column);
       new_zones_column = ConstraintManagement._autoCross(new_zones_column);
+      autoCrossed = true;
     }
     //too much "validate" areas => fail
     else if (areas.length > clues.length && nb_cross === level.size - sum_zone_fill) {
@@ -167,13 +198,17 @@ const ConstraintManagement = {
     }
     //not perfect areas => check Areas
     else if (areas.length !== 0) {
-      new_clues_column = ConstraintManagement._checkValidityAreasStartLeft(ClueType.Column, new_clues_column, areas, nb_column, level, board);
+      new_clues_column = ConstraintManagement._checkValidityAreasStartLeft(CluesType.Column, new_clues_column, areas, nb_column, level, board);
     }
     //all zones are crossed => fail
     else if (areas.length === 0 && nb_cross === level.size) {
       new_clues_column.classGlobal = "clues_ERROR";
     }
-    return { new_clues_column, new_zones_column };
+    return {
+      clues_column: new_clues_column,
+      zones_column: new_zones_column,
+      autoCrossed: autoCrossed,
+    };
   },
 
   _buildAreasLine: (nb_line: number, board: Board) => {

@@ -1,5 +1,6 @@
 import { useAppSelector } from "../../../../redux/hooks";
-import Clue, { ClueType } from "../../Clue";
+import Clue from "../../Clue";
+import { CluesType } from "../../interfaces/LevelSource";
 import { selectApiBoard, selectApiLevel } from "../../redux";
 
 interface Props {
@@ -22,7 +23,7 @@ const CluesColumn: React.FC<Props> = (props: Props) => {
         nb_column={props.nb_column}
         index={index}
         value={value}
-        type={ClueType.Column}
+        type={CluesType.Column}
       />
     );
   }

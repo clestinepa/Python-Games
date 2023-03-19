@@ -1,8 +1,9 @@
-import { Action, Board, Level } from "../LevelSource";
+import { Action, Board, Level, PastAction } from "../LevelSource";
 
 export interface GameState {
   level: Level;
   board: Board;
+  pastActions: PastAction[]
 }
 
 export interface ActionState {

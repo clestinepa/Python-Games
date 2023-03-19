@@ -1,3 +1,8 @@
+export enum CluesType {
+  Line,
+  Column,
+}
+
 export interface Level {
   name: string;
   difficulty: number;
@@ -26,4 +31,17 @@ export interface Board {
   currentBoard: number[][];
   classCluesLines: ClassClues[];
   classCluesColumns: ClassClues[];
+}
+
+export interface PastAction {
+  nb_line : number,
+  nb_column : number,
+  pastZone : number,
+  newZone : number,
+  autoCrossedLine: boolean,
+  pastZonesLine : number[],
+  newZonesLine : number[],
+  autoCrossedColumn: boolean,
+  pastZonesColumn : number[],
+  newZonesColumn : number[],
 }

@@ -1,5 +1,6 @@
 import { useAppSelector } from "../../../../redux/hooks";
-import Clue, { ClueType } from "../../Clue";
+import Clue from "../../Clue";
+import { CluesType } from "../../interfaces/LevelSource";
 import { selectApiBoard, selectApiLevel } from "../../redux";
 
 interface Props {
@@ -19,7 +20,7 @@ const CluesLine: React.FC<Props> = (props: Props) => {
         nb_line={props.nb_line}
         index={index}
         value={value}
-        type={ClueType.Line}
+        type={CluesType.Line}
       />
     );
   }

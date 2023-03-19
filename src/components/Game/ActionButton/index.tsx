@@ -34,7 +34,7 @@ const ActionButton: React.FC = () => {
   return (
     <button
       onClick={() => handleClick()}
-      id="action"
+      id="actionButton"
       className={actionButtonState.class}
     >
       {actionButtonState.text}
