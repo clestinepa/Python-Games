@@ -34,7 +34,6 @@ const ConstraintManagement = {
     dispatch(updateCluesColumn(nb_column, new_value_column.clues_column));
     dispatch(updateZonesColumn(nb_column, new_value_column.zones_column));
 
-    console.log("l", new_value_line.autoCrossed, "c", new_value_column.autoCrossed)
     dispatch(
       updateLastAction(
         new_value_line.autoCrossed,

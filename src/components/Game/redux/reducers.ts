@@ -79,20 +79,22 @@ export const gameReducer = createReducer(initialState, (builder) => {
       } else if (state.board.currentBoard[action.payload.nb_line][action.payload.nb_column] === 1 && action.payload.new_zone !== 1) {
         state.board.currentFill--;
       }
-      let lastAction: PastAction = {
-        nb_line: action.payload.nb_line,
-        nb_column: action.payload.nb_column,
-        pastZone: state.board.currentBoard[action.payload.nb_line][action.payload.nb_column],
-        newZone: action.payload.new_zone,
-        autoCrossedLine: false,
-        pastZonesLine: [],
-        newZonesLine: [],
-        autoCrossedColumn: false,
-        pastZonesColumn:[],
-        newZonesColumn: [],
-      };
-      state.pastActions.push(lastAction);
-      state.board.currentBoard[action.payload.nb_line][action.payload.nb_column] = action.payload.new_zone;
+      if (state.board.currentBoard[action.payload.nb_line][action.payload.nb_column] !== action.payload.new_zone) {
+        let lastAction: PastAction = {
+          nb_line: action.payload.nb_line,
+          nb_column: action.payload.nb_column,
+          pastZone: state.board.currentBoard[action.payload.nb_line][action.payload.nb_column],
+          newZone: action.payload.new_zone,
+          autoCrossedLine: false,
+          pastZonesLine: [],
+          newZonesLine: [],
+          autoCrossedColumn: false,
+          pastZonesColumn: [],
+          newZonesColumn: [],
+        };
+        state.pastActions.push(lastAction);
+        state.board.currentBoard[action.payload.nb_line][action.payload.nb_column] = action.payload.new_zone;
+      }
     })
     .addCase(updateCluesLine, (state, action) => {
       state.board.classCluesLines[action.payload.nb_line] = action.payload.new_clues_line;
@@ -110,13 +112,12 @@ export const gameReducer = createReducer(initialState, (builder) => {
     })
     .addCase(updateLastAction, (state, action) => {
       if (state.pastActions[0]) {
-        state.pastActions[state.pastActions.length - 1].autoCrossedLine = action.payload.autoCrossedLine
-        state.pastActions[state.pastActions.length - 1].pastZonesLine = action.payload.pastZonesLine
-        state.pastActions[state.pastActions.length - 1].newZonesLine = action.payload.newZonesLine
-        state.pastActions[state.pastActions.length - 1].autoCrossedColumn = action.payload.autoCrossedColumn
-        state.pastActions[state.pastActions.length - 1].pastZonesColumn = action.payload.pastZonesColumn
-        state.pastActions[state.pastActions.length - 1].newZonesColumn = action.payload.newZonesColumn
+        state.pastActions[state.pastActions.length - 1].autoCrossedLine = action.payload.autoCrossedLine;
+        state.pastActions[state.pastActions.length - 1].pastZonesLine = action.payload.pastZonesLine;
+        state.pastActions[state.pastActions.length - 1].newZonesLine = action.payload.newZonesLine;
+        state.pastActions[state.pastActions.length - 1].autoCrossedColumn = action.payload.autoCrossedColumn;
+        state.pastActions[state.pastActions.length - 1].pastZonesColumn = action.payload.pastZonesColumn;
+        state.pastActions[state.pastActions.length - 1].newZonesColumn = action.payload.newZonesColumn;
       }
-    
     });
 });
