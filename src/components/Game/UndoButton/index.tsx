@@ -2,7 +2,7 @@ import React from "react";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import "../../../styles/action.css";
 import { selectApiBoard, selectApiLevel, selectApiPastAction, undoLastAction } from "../redux";
-import ConstraintManagement from "../service";
+import ConstraintManagement from "../service/ConstraintManagement";
 const UndoButton: React.FC = () => {
   const dispatch = useAppDispatch();
   const pastActions = useAppSelector(selectApiPastAction);

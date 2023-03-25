@@ -1,6 +1,6 @@
 import { AnyAction, ThunkDispatch } from "@reduxjs/toolkit";
-import { Level, Board, ClassClues, CluesType } from "../interfaces/LevelSource";
-import { updateCluesColumn, updateCluesLine, updateLastAction, updateZonesColumn, updateZonesLine } from "../redux";
+import { Level, Board, ClassClues, CluesType } from "../../interfaces/LevelSource";
+import { updateCluesColumn, updateCluesLine, updateLastAction, updateZonesColumn, updateZonesLine } from "../../redux";
 
 const ConstraintManagement = {
   checkConstraints: (needUpdateLastAction : boolean, nb_line: number, nb_column: number, level: Level, board: Board, dispatch: ThunkDispatch<any, undefined, AnyAction>) => {

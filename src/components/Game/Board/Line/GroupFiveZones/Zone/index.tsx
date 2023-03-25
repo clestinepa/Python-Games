@@ -3,7 +3,8 @@ import "../../../../../../styles/zone.css";
 import { useAppDispatch, useAppSelector } from "../../../../../../redux/hooks";
 import { selectApiAction, updateAction } from "../../../../ActionButton/redux";
 import { selectApiBoard, selectApiLevel, updateZone } from "../../../../redux";
-import ConstraintManagement from "../../../../service";
+import ConstraintManagement from "../../../../service/ConstraintManagement";
+import ClickZone from "../../../../service/ClickZone";
 
 interface Props {
   nb_line: number;
@@ -19,7 +20,10 @@ const Zone: React.FC<Props> = (props: Props) => {
   const [isModifiedInPurposeState, setIsModifiedInPurposeState] = React.useState(false);
 
   const handleMouseDown = () => {
-    let {new_action, new_zone} = clickZone();
+    let {new_action, new_zone, modifiedInPurpose} = ClickZone.clickZone(props.nb_line, props.nb_column, action, board, level);
+    if (modifiedInPurpose) {
+      setIsModifiedInPurposeState(true);
+    }
     new_action = { ...new_action, onAction: true };
     dispatch(updateAction(new_action));
     dispatch(updateZone(props.nb_line, props.nb_column, new_zone));
@@ -27,7 +31,10 @@ const Zone: React.FC<Props> = (props: Props) => {
   };
   const handleMouseEnter = () => {
     if (action.onAction) {
-      let {new_action, new_zone} = clickZone();
+      let {new_action, new_zone, modifiedInPurpose} = ClickZone.clickZone(props.nb_line, props.nb_column, action, board, level);
+      if (modifiedInPurpose) {
+        setIsModifiedInPurposeState(true);
+      }
       dispatch(updateZone(props.nb_line, props.nb_column, new_zone));
       dispatch(updateAction(new_action));
     }
@@ -40,51 +47,8 @@ const Zone: React.FC<Props> = (props: Props) => {
     }
   };
 
-  const clickZone = () => {
-
-    let new_action = action;
-    let new_zone = board.currentBoard[props.nb_line][props.nb_column];
-    if (new_action.onFill) {
-      if (new_zone === 1) {
-        //if already fill
-        if (!new_action.onAction) {
-          //only the first zone define if its an empty action or not
-          new_action = { ...new_action, onEmpty: true };
-        }
-        if (new_action.onEmpty) {
-          new_zone = 0;
-        }
-      } else {
-        if (!new_action.onEmpty) {
-          new_zone = 1;
-        }
-      }
-    } else if (new_action.onCross) {
-      if (new_zone === 2) {
-        //if already cross
-        if (!new_action.onAction) {
-          //only the first zone define if its an empty action or not
-          new_action = { ...new_action, onEmpty: true };
-        }
-        if (new_action.onEmpty) {
-          new_zone = 0;
-        }
-      } else {
-        if (!new_action.onEmpty) {
-          new_zone = 2;
-        }
-      }
-    }
-    if (new_zone !== board.currentBoard[props.nb_line][props.nb_column] && board.currentFill < level.nb_fill) {
-      setIsModifiedInPurposeState(true);
-      console.log("modified in purpose", props.nb_line, props.nb_column)
-    }
-    return{new_action, new_zone};
-  };
-
   React.useEffect(() => {
     console.log(isModifiedInPurposeState, props.nb_line, props.nb_column);
-
     if (isModifiedInPurposeState) {
       console.log("LA", props.nb_line, props.nb_column);
       ConstraintManagement.checkConstraints(true, props.nb_line, props.nb_column, level, board, dispatch);
