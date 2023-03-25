@@ -16,16 +16,19 @@ const Zone: React.FC<Props> = (props: Props) => {
   const board = useAppSelector(selectApiBoard);
   const level = useAppSelector(selectApiLevel);
 
-  const [zoneState, setZoneState] = React.useState(false);
+  const [isModifiedInPurposeState, setIsModifiedInPurposeState] = React.useState(false);
 
   const handleMouseDown = () => {
-    let new_action = clickZone();
+    let {new_action, new_zone} = clickZone();
     new_action = { ...new_action, onAction: true };
     dispatch(updateAction(new_action));
+    dispatch(updateZone(props.nb_line, props.nb_column, new_zone));
+
   };
   const handleMouseEnter = () => {
     if (action.onAction) {
-      let new_action = clickZone();
+      let {new_action, new_zone} = clickZone();
+      dispatch(updateZone(props.nb_line, props.nb_column, new_zone));
       dispatch(updateAction(new_action));
     }
   };
@@ -38,7 +41,7 @@ const Zone: React.FC<Props> = (props: Props) => {
   };
 
   const clickZone = () => {
-    setZoneState(true);
+
     let new_action = action;
     let new_zone = board.currentBoard[props.nb_line][props.nb_column];
     if (new_action.onFill) {
@@ -72,17 +75,25 @@ const Zone: React.FC<Props> = (props: Props) => {
         }
       }
     }
-    dispatch(updateZone(props.nb_line, props.nb_column, new_zone));
-    return new_action;
+    if (new_zone !== board.currentBoard[props.nb_line][props.nb_column] && board.currentFill < level.nb_fill) {
+      setIsModifiedInPurposeState(true);
+      console.log("modified in purpose", props.nb_line, props.nb_column)
+    }
+    return{new_action, new_zone};
   };
 
   React.useEffect(() => {
-    if (zoneState) {
-      ConstraintManagement.checkConstraints(props.nb_line, props.nb_column, level, board, dispatch);
-      setZoneState(false);
+    console.log(isModifiedInPurposeState, props.nb_line, props.nb_column);
+
+    if (isModifiedInPurposeState) {
+      console.log("LA", props.nb_line, props.nb_column);
+      ConstraintManagement.checkConstraints(true, props.nb_line, props.nb_column, level, board, dispatch);
+      setIsModifiedInPurposeState(false);
+    } else {
+      console.log("");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [board.currentBoard[props.nb_line][props.nb_column]]);
+  }, [board.currentBoard[props.nb_line][props.nb_column], isModifiedInPurposeState]);
 
   return (
     <button

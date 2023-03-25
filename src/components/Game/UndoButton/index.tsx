@@ -1,21 +1,53 @@
-import { useAppSelector } from "../../../redux/hooks";
+import React from "react";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import "../../../styles/action.css";
-import { selectApiPastAction } from "../redux";
+import { selectApiBoard, selectApiLevel, selectApiPastAction, undoLastAction } from "../redux";
+import ConstraintManagement from "../service";
 const UndoButton: React.FC = () => {
+  const dispatch = useAppDispatch();
   const pastActions = useAppSelector(selectApiPastAction);
+  const board = useAppSelector(selectApiBoard);
+  const level = useAppSelector(selectApiLevel);
 
+  const [undoState, setUndoState] = React.useState({
+    onUndo: false,
+    nb_line: 0,
+    nb_column: 0,
+  });
 
   const handleClick = () => {
-    console.log(pastActions)
+    if (pastActions.length !== 0) {
+      setUndoState({
+        onUndo: true,
+        nb_line: pastActions[pastActions.length -1].nb_line ,
+        nb_column: pastActions[pastActions.length -1].nb_column,
+      });
+      dispatch(undoLastAction());
+    }
   };
 
+  React.useEffect(() => {
+    if (undoState.onUndo) {
+      console.log("here")
+      ConstraintManagement.checkConstraints(false, undoState.nb_line, undoState.nb_column, level, board, dispatch);
+      setUndoState({
+        onUndo: false,
+        nb_line: 0,
+        nb_column: 0,
+      });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [undoState.onUndo]);
+
   return (
-    <button
-      onClick={() => handleClick()}
-      id="undoButton"
-    >
-        UNDO
+    <div>
+    <button onClick={() => handleClick()} id="undoButton">
+      UNDO
     </button>
+    <button onClick={() => {console.log(pastActions)}}>
+      check
+    </button>
+    </div>
   );
 };
 

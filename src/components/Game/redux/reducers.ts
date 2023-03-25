@@ -4,6 +4,7 @@ import { GameState } from "../interfaces/LevelState";
 import {
   initialBoard,
   setNameLevel,
+  undoLastAction,
   updateCluesColumn,
   updateCluesLine,
   updateLastAction,
@@ -17,7 +18,8 @@ const initialState: GameState = {
     name: "test",
     difficulty: 1,
     size: 10,
-    nb_fill: 52,
+    // nb_fill: 52,
+    nb_fill: 99,
     clues: {
       column: [[1], [3, 2], [5, 3], [2, 5], [1, 4], [1, 4], [2, 5], [5, 3], [3, 2], [1]],
       line: [[4], [2, 2], [2, 2], [2, 2], [2, 2], [2, 2], [4], [6], [8], [10]],
@@ -84,13 +86,8 @@ export const gameReducer = createReducer(initialState, (builder) => {
           nb_line: action.payload.nb_line,
           nb_column: action.payload.nb_column,
           pastZone: state.board.currentBoard[action.payload.nb_line][action.payload.nb_column],
-          newZone: action.payload.new_zone,
-          autoCrossedLine: false,
           pastZonesLine: [],
-          newZonesLine: [],
-          autoCrossedColumn: false,
           pastZonesColumn: [],
-          newZonesColumn: [],
         };
         state.pastActions.push(lastAction);
         state.board.currentBoard[action.payload.nb_line][action.payload.nb_column] = action.payload.new_zone;
@@ -111,13 +108,21 @@ export const gameReducer = createReducer(initialState, (builder) => {
       }
     })
     .addCase(updateLastAction, (state, action) => {
-      if (state.pastActions[0]) {
-        state.pastActions[state.pastActions.length - 1].autoCrossedLine = action.payload.autoCrossedLine;
-        state.pastActions[state.pastActions.length - 1].pastZonesLine = action.payload.pastZonesLine;
-        state.pastActions[state.pastActions.length - 1].newZonesLine = action.payload.newZonesLine;
-        state.pastActions[state.pastActions.length - 1].autoCrossedColumn = action.payload.autoCrossedColumn;
-        state.pastActions[state.pastActions.length - 1].pastZonesColumn = action.payload.pastZonesColumn;
-        state.pastActions[state.pastActions.length - 1].newZonesColumn = action.payload.newZonesColumn;
+      state.pastActions[state.pastActions.length - 1].pastZonesLine = action.payload.pastZonesLine;
+      state.pastActions[state.pastActions.length - 1].pastZonesColumn = action.payload.pastZonesColumn;
+    })
+    .addCase(undoLastAction, (state) => {
+      if (state.pastActions.length !== 0) {
+        let lastAction = state.pastActions[state.pastActions.length - 1];
+        if (state.board.currentBoard[lastAction.nb_line][lastAction.nb_column] === 1 && lastAction.pastZone !== 1) {
+          state.board.currentFill--;
+        }
+        state.board.currentBoard[lastAction.nb_line] = lastAction.pastZonesLine;
+        for (let nb_line = 0; nb_line < state.board.currentBoard.length; nb_line++) {
+          state.board.currentBoard[nb_line][lastAction.nb_column] = lastAction.pastZonesColumn[nb_line];
+        }
+        state.board.currentBoard[lastAction.nb_line][lastAction.nb_column] = lastAction.pastZone;
+        state.pastActions.pop();
       }
     });
 });

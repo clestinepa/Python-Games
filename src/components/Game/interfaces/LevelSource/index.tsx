@@ -37,11 +37,6 @@ export interface PastAction {
   nb_line : number,
   nb_column : number,
   pastZone : number,
-  newZone : number,
-  autoCrossedLine: boolean,
   pastZonesLine : number[],
-  newZonesLine : number[],
-  autoCrossedColumn: boolean,
   pastZonesColumn : number[],
-  newZonesColumn : number[],
 }

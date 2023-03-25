@@ -42,15 +42,13 @@ export const updateZonesColumn = createAction("board/updateZonesColumn", functio
 export const updateLastAction = createAction(
   "pastActions/updateLastAction",
   function prepare(
-    autoCrossedLine: boolean,
     pastZonesLine: number[],
-    newZonesLine: number[],
-    autoCrossedColumn: boolean,
     pastZonesColumn: number[],
-    newZonesColumn: number[]
   ) {
     return {
-      payload: {autoCrossedLine, pastZonesLine, newZonesLine, autoCrossedColumn, pastZonesColumn, newZonesColumn },
+      payload: { pastZonesLine, pastZonesColumn },
     };
   }
 );
+
+export const undoLastAction = createAction("pastActions/undoLastAction");

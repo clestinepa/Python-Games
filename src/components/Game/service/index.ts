@@ -3,11 +3,10 @@ import { Level, Board, ClassClues, CluesType } from "../interfaces/LevelSource";
 import { updateCluesColumn, updateCluesLine, updateLastAction, updateZonesColumn, updateZonesLine } from "../redux";
 
 const ConstraintManagement = {
-  checkConstraints: (nb_line: number, nb_column: number, level: Level, board: Board, dispatch: ThunkDispatch<any, undefined, AnyAction>) => {
+  checkConstraints: (needUpdateLastAction : boolean, nb_line: number, nb_column: number, level: Level, board: Board, dispatch: ThunkDispatch<any, undefined, AnyAction>) => {
     let past_value_line = {
       clues_line: Object.assign({}, board.classCluesLines[nb_line]),
       zones_line: [...board.currentBoard[nb_line]],
-      autoCrossed: false,
     };
     let new_value_line = past_value_line;
     new_value_line = ConstraintManagement._checkLineConstraints(new_value_line.clues_line, new_value_line.zones_line, nb_line, level, board);
@@ -21,7 +20,6 @@ const ConstraintManagement = {
     let past_value_column = {
       clues_column: Object.assign({}, board.classCluesColumns[nb_column]),
       zones_column: new_zones_column,
-      autoCrossed: false,
     };
     let new_value_column = past_value_column;
     new_value_column = ConstraintManagement._checkColumnConstraints(
@@ -34,20 +32,12 @@ const ConstraintManagement = {
     dispatch(updateCluesColumn(nb_column, new_value_column.clues_column));
     dispatch(updateZonesColumn(nb_column, new_value_column.zones_column));
 
-    dispatch(
-      updateLastAction(
-        new_value_line.autoCrossed,
-        past_value_line.zones_line,
-        new_value_line.zones_line,
-        new_value_column.autoCrossed,
-        past_value_column.zones_column,
-        new_value_column.zones_column
-      )
-    );
+    if (needUpdateLastAction) {
+      dispatch(updateLastAction(past_value_line.zones_line, past_value_column.zones_column));
+    }
   },
 
   _checkLineConstraints: (new_clues_line: ClassClues, new_zones_line: number[], nb_line: number, level: Level, board: Board) => {
-    let autoCrossed = false;
     new_clues_line = ConstraintManagement._updateCluesNormal(new_clues_line);
 
     //build the areas
@@ -63,7 +53,6 @@ const ConstraintManagement = {
     if (areas.toString() === clues.toString()) {
       new_clues_line = ConstraintManagement._updateCluesDone(new_clues_line);
       new_zones_line = ConstraintManagement._autoCross(new_zones_line);
-      autoCrossed = true;
     }
     //too much "validate" areas => fail
     else if (areas.length > clues.length && nb_cross === level.size - sum_zone_fill) {
@@ -77,7 +66,7 @@ const ConstraintManagement = {
     else if (areas.length === 0 && nb_cross === level.size) {
       new_clues_line.classGlobal = "clues_ERROR";
     }
-    return { clues_line: new_clues_line, zones_line: new_zones_line, autoCrossed: autoCrossed };
+    return { clues_line: new_clues_line, zones_line: new_zones_line };
   },
 
   _checkValidityAreasStartLeft: (type: CluesType, new_clues: ClassClues, areas: number[], index: number, level: Level, board: Board) => {
@@ -174,7 +163,6 @@ const ConstraintManagement = {
   },
 
   _checkColumnConstraints: (new_clues_column: ClassClues, new_zones_column: number[], nb_column: number, level: Level, board: Board) => {
-    let autoCrossed = false;
     new_clues_column = ConstraintManagement._updateCluesNormal(new_clues_column);
     //build the areas
     let { areas, nb_cross } = ConstraintManagement._buildAreasColumn(nb_column, board);
@@ -189,7 +177,6 @@ const ConstraintManagement = {
     if (areas.toString() === clues.toString()) {
       new_clues_column = ConstraintManagement._updateCluesDone(new_clues_column);
       new_zones_column = ConstraintManagement._autoCross(new_zones_column);
-      autoCrossed = true;
     }
     //too much "validate" areas => fail
     else if (areas.length > clues.length && nb_cross === level.size - sum_zone_fill) {
@@ -206,7 +193,6 @@ const ConstraintManagement = {
     return {
       clues_column: new_clues_column,
       zones_column: new_zones_column,
-      autoCrossed: autoCrossed,
     };
   },
 
