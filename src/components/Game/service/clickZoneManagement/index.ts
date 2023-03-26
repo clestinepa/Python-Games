@@ -1,6 +1,6 @@
 import { Action, Board, Level } from "../../interfaces/LevelSource";
 
-const ClickZone = {
+const clickZoneManagement = {
   _lastExecution: new Date().getTime(),
   _queueExecution: [],
   _timeWait : 100,
@@ -10,8 +10,8 @@ const ClickZone = {
     let new_zone = board.currentBoard[nb_line][nb_column];
     let modifiedInPurpose = false;
     let execution = new Date().getTime();
-    console.log(execution, ClickZone._lastExecution, execution - ClickZone._lastExecution)
-    if (execution - ClickZone._lastExecution >= ClickZone._timeWait) {
+    console.log(execution, clickZoneManagement._lastExecution, execution - clickZoneManagement._lastExecution)
+    if (execution - clickZoneManagement._lastExecution >= clickZoneManagement._timeWait) {
         console.log("nouvelle execution")
       if (new_action.onFill) {
         if (new_zone === 1) {
@@ -49,7 +49,7 @@ const ClickZone = {
         console.log("modified in purpose", nb_line, nb_column);
       }
 
-      ClickZone._lastExecution = execution;
+      clickZoneManagement._lastExecution = execution;
     } else {
         console.log("CALM DOWN")
     }
@@ -58,4 +58,4 @@ const ClickZone = {
   },
 };
 
-export default ClickZone;
+export default clickZoneManagement;
