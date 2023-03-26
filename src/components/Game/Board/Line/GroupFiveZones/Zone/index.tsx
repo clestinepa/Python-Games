@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from "../../../../../../redux/hooks";
 import { selectApiAction, updateAction } from "../../../../ActionButton/redux";
 import { selectApiBoard, selectApiLevel, updateZone } from "../../../../redux";
 import ConstraintManagement from "../../../../service/ConstraintManagement";
-import clickZoneManagement from "../../../../service/clickZoneManagement";
+import ClickZoneManagement from "../../../../service/ClickZoneManagement";
 
 interface Props {
   nb_line: number;
@@ -20,7 +20,7 @@ const Zone: React.FC<Props> = (props: Props) => {
   const [isModifiedInPurposeState, setIsModifiedInPurposeState] = React.useState(false);
 
   const handleMouseDown = () => {
-    let {new_action, new_zone, modifiedInPurpose} = clickZoneManagement.handleClick({nb_line:props.nb_line, nb_column: props.nb_column, action, board, level});
+    let {new_action, new_zone, modifiedInPurpose} = ClickZoneManagement.handleClick({nb_line:props.nb_line, nb_column: props.nb_column, action, board, level});
     if (modifiedInPurpose) {
       setIsModifiedInPurposeState(true);
     }
@@ -31,7 +31,7 @@ const Zone: React.FC<Props> = (props: Props) => {
   };
   const handleMouseEnter = () => {
     if (action.onAction) {
-      let {new_action, new_zone, modifiedInPurpose} = clickZoneManagement.handleClick({nb_line:props.nb_line, nb_column: props.nb_column, action, board, level});
+      let {new_action, new_zone, modifiedInPurpose} = ClickZoneManagement.handleClick({nb_line:props.nb_line, nb_column: props.nb_column, action, board, level});
       if (modifiedInPurpose) {
         setIsModifiedInPurposeState(true);
       }
