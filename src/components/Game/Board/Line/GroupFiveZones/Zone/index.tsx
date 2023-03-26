@@ -20,7 +20,7 @@ const Zone: React.FC<Props> = (props: Props) => {
   const [isModifiedInPurposeState, setIsModifiedInPurposeState] = React.useState(false);
 
   const handleMouseDown = () => {
-    let {new_action, new_zone, modifiedInPurpose} = clickZoneManagement.clickZone(props.nb_line, props.nb_column, action, board, level);
+    let {new_action, new_zone, modifiedInPurpose} = clickZoneManagement.handleClick({nb_line:props.nb_line, nb_column: props.nb_column, action, board, level});
     if (modifiedInPurpose) {
       setIsModifiedInPurposeState(true);
     }
@@ -31,7 +31,7 @@ const Zone: React.FC<Props> = (props: Props) => {
   };
   const handleMouseEnter = () => {
     if (action.onAction) {
-      let {new_action, new_zone, modifiedInPurpose} = clickZoneManagement.clickZone(props.nb_line, props.nb_column, action, board, level);
+      let {new_action, new_zone, modifiedInPurpose} = clickZoneManagement.handleClick({nb_line:props.nb_line, nb_column: props.nb_column, action, board, level});
       if (modifiedInPurpose) {
         setIsModifiedInPurposeState(true);
       }
