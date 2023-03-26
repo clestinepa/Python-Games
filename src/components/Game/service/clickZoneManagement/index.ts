@@ -1,4 +1,6 @@
+import { AnyAction, ThunkDispatch } from "@reduxjs/toolkit";
 import { Action, Board, Level } from "../../interfaces/LevelSource";
+import { updateZone } from "../../redux";
 
 interface Execution {
   nb_line: number;
@@ -6,12 +8,8 @@ interface Execution {
   action: Action;
   board: Board;
   level: Level;
-}
-
-interface ResultClickZone {
-  new_action : Action ;
-  new_zone : number;
-  modifiedInPurpose : boolean;
+  dispatch: ThunkDispatch<any, undefined, AnyAction>;
+  setIsModifiedInPurposeState :React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 class QueueExecution {
@@ -39,80 +37,90 @@ class QueueExecution {
 }
 
 const ClickZoneManagement = {
-  _lastExecution: null as number | null,
+  _lastExecution: 0,
   _queueExecution: new QueueExecution(),
-  _timeWait : 100,
+  _timeWait: 100,
 
-  handleClick : (param: Execution) => {
-    let result : ResultClickZone = {
-      new_action : param.action,
-      new_zone : param.board.currentBoard[param.nb_line][param.nb_column],
-      modifiedInPurpose : false,
-    }
-  
+  handleClick: (param: Execution) => {
+    let new_action= param.action;
 
-    // Vérifier si la dernière exécution est à plus de 100 millisecondes
-    if (ClickZoneManagement._lastExecution === null || Date.now() - ClickZoneManagement._lastExecution >= ClickZoneManagement._timeWait) {
-      result = ClickZoneManagement._clickZone(param)
-      ClickZoneManagement._lastExecution = Date.now();
+    // if we wait enough after the last execution
+    if (Date.now() - ClickZoneManagement._lastExecution >= ClickZoneManagement._timeWait) {
+      if (ClickZoneManagement._queueExecution.isEmpty()) {
+        //if there is no queue => execute now
+        console.log("GO", param.nb_line, param.nb_column)
+        new_action = ClickZoneManagement._clickZone(param);
+        ClickZoneManagement._lastExecution = Date.now();
+      } else {
+        //if some execution are waiting => this one also wait
+        console.log("YOU WAIT", param.nb_line, param.nb_column)
+        ClickZoneManagement._queueExecution.enqueue(param);
+        //execute the one waiting first
+        let execution = ClickZoneManagement._queueExecution.dequeue();
+        new_action = ClickZoneManagement._clickZone(execution!);
+      }
     } else {
-      ClickZoneManagement._queueExecution.enqueue(param)
-        console.log("CALM DOWN")
+      console.log("CALM DOWN", param.nb_line, param.nb_column);
+      ClickZoneManagement._queueExecution.enqueue(param);
+
     }
 
-    return result;
+    return new_action;
   },
 
-  _clickZone : (param : Execution) => {
-    let new_result : ResultClickZone = {
-      new_action : param.action,
-      new_zone : param.board.currentBoard[param.nb_line][param.nb_column],
-      modifiedInPurpose : false,
-    }
-    
-    if (new_result.new_action.onFill) {
-      if (new_result.new_zone === 1) {
+  _clickZone: (param: Execution) => {
+    let new_action= param.action;
+    let modifiedInPurpose= false;
+    let new_zone = param.board.currentBoard[param.nb_line][param.nb_column];
+
+    if (new_action.onFill) {
+      if (new_zone === 1) {
         //if already fill
-        if (!new_result.new_action.onAction) {
+        if (!new_action.onAction) {
           //only the first zone define if its an empty action or not
-          new_result.new_action = { ...new_result.new_action, onEmpty: true };
+          new_action = { ...new_action, onEmpty: true };
         }
-        if (new_result.new_action.onEmpty) {
-          new_result.new_zone = 0;
+        if (new_action.onEmpty) {
+          new_zone = 0;
         }
       } else {
-        if (!new_result.new_action.onEmpty) {
-          new_result.new_zone = 1;
+        if (!new_action.onEmpty) {
+          new_zone = 1;
         }
       }
-    } else if (new_result.new_action.onCross) {
-      if (new_result.new_zone === 2) {
+    } else if (new_action.onCross) {
+      if (new_zone === 2) {
         //if already cross
-        if (!new_result.new_action.onAction) {
+        if (!new_action.onAction) {
           //only the first zone define if its an empty action or not
-          new_result.new_action = { ...new_result.new_action, onEmpty: true };
+          new_action = { ...new_action, onEmpty: true };
         }
-        if (new_result.new_action.onEmpty) {
-          new_result.new_zone = 0;
+        if (new_action.onEmpty) {
+          new_zone = 0;
         }
       } else {
-        if (!new_result.new_action.onEmpty) {
-          new_result.new_zone = 2;
+        if (!new_action.onEmpty) {
+          new_zone = 2;
         }
       }
     }
-    if (new_result.new_zone !== param.board.currentBoard[param.nb_line][param.nb_column] && param.board.currentFill < param.level.nb_fill) {
-      new_result.modifiedInPurpose = true;
+    if (new_zone !== param.board.currentBoard[param.nb_line][param.nb_column] && param.board.currentFill < param.level.nb_fill) {
+      modifiedInPurpose = true;
       console.log("modified in purpose", param.nb_line, param.nb_column);
     }
 
-    return new_result;
+    if (modifiedInPurpose) {
+      param.setIsModifiedInPurposeState(true);
+    }
+    param.dispatch(updateZone(param.nb_line, param.nb_column, new_zone));
+
+    return new_action;
   },
 
-  _processQueueExecution : () => {
+  _processQueueExecution: () => {
     while (!ClickZoneManagement._queueExecution.isEmpty()) {
       let execution = ClickZoneManagement._queueExecution.dequeue();
-      ClickZoneManagement._clickZone(execution!)
+      ClickZoneManagement._clickZone(execution!);
     }
   },
 };

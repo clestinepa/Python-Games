@@ -2,7 +2,7 @@ import React from "react";
 import "../../../../../../styles/zone.css";
 import { useAppDispatch, useAppSelector } from "../../../../../../redux/hooks";
 import { selectApiAction, updateAction } from "../../../../ActionButton/redux";
-import { selectApiBoard, selectApiLevel, updateZone } from "../../../../redux";
+import { selectApiBoard, selectApiLevel } from "../../../../redux";
 import ConstraintManagement from "../../../../service/ConstraintManagement";
 import ClickZoneManagement from "../../../../service/ClickZoneManagement";
 
@@ -20,22 +20,14 @@ const Zone: React.FC<Props> = (props: Props) => {
   const [isModifiedInPurposeState, setIsModifiedInPurposeState] = React.useState(false);
 
   const handleMouseDown = () => {
-    let {new_action, new_zone, modifiedInPurpose} = ClickZoneManagement.handleClick({nb_line:props.nb_line, nb_column: props.nb_column, action, board, level});
-    if (modifiedInPurpose) {
-      setIsModifiedInPurposeState(true);
-    }
+    let new_action= ClickZoneManagement.handleClick({nb_line:props.nb_line, nb_column: props.nb_column, action, board, level, dispatch, setIsModifiedInPurposeState});
     new_action = { ...new_action, onAction: true };
     dispatch(updateAction(new_action));
-    dispatch(updateZone(props.nb_line, props.nb_column, new_zone));
 
   };
   const handleMouseEnter = () => {
     if (action.onAction) {
-      let {new_action, new_zone, modifiedInPurpose} = ClickZoneManagement.handleClick({nb_line:props.nb_line, nb_column: props.nb_column, action, board, level});
-      if (modifiedInPurpose) {
-        setIsModifiedInPurposeState(true);
-      }
-      dispatch(updateZone(props.nb_line, props.nb_column, new_zone));
+      let new_action = ClickZoneManagement.handleClick({nb_line:props.nb_line, nb_column: props.nb_column, action, board, level, dispatch, setIsModifiedInPurposeState});
       dispatch(updateAction(new_action));
     }
   };
