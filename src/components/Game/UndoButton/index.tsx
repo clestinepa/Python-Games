@@ -2,6 +2,7 @@ import React from "react";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import "../../../styles/action.css";
 import { selectApiBoard, selectApiLevel, selectApiPastAction, undoLastAction } from "../redux";
+import ClickZoneManagement from "../service/ClickZoneManagement";
 import ConstraintManagement from "../service/ConstraintManagement";
 const UndoButton: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -28,7 +29,7 @@ const UndoButton: React.FC = () => {
 
   React.useEffect(() => {
     if (undoState.onUndo) {
-      console.log("here")
+      console.log("UNDO : process checkConstraint")
       ConstraintManagement.checkConstraints(false, undoState.nb_line, undoState.nb_column, level, board, dispatch);
       setUndoState({
         onUndo: false,
@@ -44,7 +45,7 @@ const UndoButton: React.FC = () => {
     <button onClick={() => handleClick()} id="undoButton">
       UNDO
     </button>
-    <button onClick={() => {console.log(pastActions)}}>
+    <button onClick={() => {ClickZoneManagement.displayQueue()}}>
       check
     </button>
     </div>

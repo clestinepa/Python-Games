@@ -20,15 +20,18 @@ const Zone: React.FC<Props> = (props: Props) => {
   const [isModifiedInPurposeState, setIsModifiedInPurposeState] = React.useState(false);
 
   const handleMouseDown = () => {
-    let new_action= ClickZoneManagement.handleClick({nb_line:props.nb_line, nb_column: props.nb_column, action, board, level, dispatch, setIsModifiedInPurposeState});
+    let new_action = action;
+    if(ClickZoneManagement.handleClick({nb_line:props.nb_line, nb_column: props.nb_column, action, board, level, dispatch, setIsModifiedInPurposeState})) {
+      //isEmptyAction
+      new_action = { ...new_action, onEmpty: true };
+    }
     new_action = { ...new_action, onAction: true };
     dispatch(updateAction(new_action));
 
   };
   const handleMouseEnter = () => {
     if (action.onAction) {
-      let new_action = ClickZoneManagement.handleClick({nb_line:props.nb_line, nb_column: props.nb_column, action, board, level, dispatch, setIsModifiedInPurposeState});
-      dispatch(updateAction(new_action));
+      ClickZoneManagement.handleClick({nb_line:props.nb_line, nb_column: props.nb_column, action, board, level, dispatch, setIsModifiedInPurposeState});
     }
   };
   document.onmouseup = () => {
@@ -40,16 +43,16 @@ const Zone: React.FC<Props> = (props: Props) => {
   };
 
   React.useEffect(() => {
-    console.log(isModifiedInPurposeState, props.nb_line, props.nb_column);
+    // console.log(isModifiedInPurposeState, props.nb_line, props.nb_column);
     if (isModifiedInPurposeState) {
-      console.log("LA", props.nb_line, props.nb_column);
+      // console.log("CLICK : process checkConstraint", props.nb_line, props.nb_column);
       ConstraintManagement.checkConstraints(true, props.nb_line, props.nb_column, level, board, dispatch);
       setIsModifiedInPurposeState(false);
     } else {
-      console.log("");
+      // console.log("");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [board.currentBoard[props.nb_line][props.nb_column], isModifiedInPurposeState]);
+  }, [board.currentBoard[props.nb_line][props.nb_column]]);
 
   return (
     <button
