@@ -43,13 +43,9 @@ const Zone: React.FC<Props> = (props: Props) => {
   };
 
   React.useEffect(() => {
-    // console.log(isModifiedInPurposeState, props.nb_line, props.nb_column);
     if (isModifiedInPurposeState) {
-      // console.log("CLICK : process checkConstraint", props.nb_line, props.nb_column);
       ConstraintManagement.checkConstraints(true, props.nb_line, props.nb_column, level, board, dispatch);
       setIsModifiedInPurposeState(false);
-    } else {
-      // console.log("");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [board.currentBoard[props.nb_line][props.nb_column]]);

@@ -32,18 +32,16 @@ class QueueExecution {
 const ClickZoneManagement = {
   _lastExecution: 0,
   _queueExecution: new QueueExecution(),
-  _timeWait: 50,
+  _timeWait: 30,
   _intervalId: null as NodeJS.Timer | null,
 
   startProcessingQueueExecution: () => {
     ClickZoneManagement._intervalId = setInterval(() => {
       ClickZoneManagement._processQueueExecution();
     }, ClickZoneManagement._timeWait);
-    console.log("START", ClickZoneManagement._intervalId);
   },
 
   stopProcessingQueueExecution: () => {
-    console.log("STOP", ClickZoneManagement._intervalId);
     clearInterval(ClickZoneManagement._intervalId!);
     ClickZoneManagement._intervalId = null;
   },
@@ -55,21 +53,16 @@ const ClickZoneManagement = {
     if (Date.now() - ClickZoneManagement._lastExecution >= ClickZoneManagement._timeWait) {
       if (ClickZoneManagement._queueExecution.isEmpty()) {
         //if there is no queue => execute now
-        // console.log("GO", param.nb_line, param.nb_column);
-        isEmptyAction = ClickZoneManagement._clickZone(param);
+        isEmptyAction = ClickZoneManagement._clickZone(param).isEmptyAction;
         ClickZoneManagement._lastExecution = Date.now();
       } else {
         //if some execution are waiting => this one also wait
-        // console.log("YOU WAIT", param.nb_line, param.nb_column);
         ClickZoneManagement._queueExecution.enqueue(param);
       }
     } else {
       if (ClickZoneManagement._intervalId === null) {
-        console.log("START", param.nb_line, param.nb_column);
         ClickZoneManagement.startProcessingQueueExecution();
       }
-
-      // console.log("CALM DOWN", param.nb_line, param.nb_column);
       ClickZoneManagement._queueExecution.enqueue(param);
     }
 
@@ -113,36 +106,29 @@ const ClickZoneManagement = {
     }
     if (new_zone !== execution.board.currentBoard[execution.nb_line][execution.nb_column] && execution.board.currentFill < execution.level.nb_fill) {
       modifiedInPurpose = true;
-      // console.log("modified in purpose", execution.nb_line, execution.nb_column);
     }
 
     if (modifiedInPurpose) {
       execution.setIsModifiedInPurposeState(true);
+      execution.dispatch(updateZone(execution.nb_line, execution.nb_column, new_zone));
     }
-    execution.dispatch(updateZone(execution.nb_line, execution.nb_column, new_zone));
 
-    return new_action.onEmpty === true;
+    return {isEmptyAction : new_action.onEmpty === true, modifiedInPurpose: modifiedInPurpose};
   },
 
   _processQueueExecution: () => {
     if (!ClickZoneManagement._queueExecution.isEmpty()) {
-      // console.log("execution !");
-      let execution = ClickZoneManagement._queueExecution.dequeue();
-      let new_action = ClickZoneManagement._clickZone(execution!);
+      let modifiedInPurpose= false;
+      //ignore if the click do nothing
+      while (!modifiedInPurpose && !ClickZoneManagement._queueExecution.isEmpty()) {
+        let execution = ClickZoneManagement._queueExecution.dequeue();
+        modifiedInPurpose = ClickZoneManagement._clickZone(execution!).modifiedInPurpose
+      };
       ClickZoneManagement._lastExecution = Date.now();
-      //je sais pas si je dois dispatch ce new_action
-    } else {
-      console.log("plus d'execution en attente");
     }
 
     if (ClickZoneManagement._queueExecution.isEmpty()) {
       ClickZoneManagement.stopProcessingQueueExecution();
-    }
-  },
-
-  displayQueue: () => {
-    for (let execution of ClickZoneManagement._queueExecution.executions) {
-      console.log(execution);
     }
   },
 };

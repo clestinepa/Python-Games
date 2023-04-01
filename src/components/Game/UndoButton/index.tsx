@@ -2,8 +2,13 @@ import React from "react";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import "../../../styles/action.css";
 import { selectApiBoard, selectApiLevel, selectApiPastAction, undoLastAction } from "../redux";
-import ClickZoneManagement from "../service/ClickZoneManagement";
 import ConstraintManagement from "../service/ConstraintManagement";
+
+//PROBLEMES !
+//Cross sur Fill ne réduit pas le count de fill
+// vitesse a encore des problèmes avec undo dans quelques cas particuliers (a identifier)
+
+
 const UndoButton: React.FC = () => {
   const dispatch = useAppDispatch();
   const pastActions = useAppSelector(selectApiPastAction);
@@ -29,7 +34,6 @@ const UndoButton: React.FC = () => {
 
   React.useEffect(() => {
     if (undoState.onUndo) {
-      console.log("UNDO : process checkConstraint")
       ConstraintManagement.checkConstraints(false, undoState.nb_line, undoState.nb_column, level, board, dispatch);
       setUndoState({
         onUndo: false,
@@ -45,7 +49,7 @@ const UndoButton: React.FC = () => {
     <button onClick={() => handleClick()} id="undoButton">
       UNDO
     </button>
-    <button onClick={() => {ClickZoneManagement.displayQueue()}}>
+    <button onClick={() => {console.log(pastActions)}}>
       check
     </button>
     </div>
