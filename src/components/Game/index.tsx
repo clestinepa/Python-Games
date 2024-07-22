@@ -1,12 +1,13 @@
-import CluesColumns from "./CluesColumns";
-import CluesLines from "./CluesLines";
-import Board from "./Board";
-import ActionButton from "./ActionButton";
+import ActionButton from "../Buttons/ActionButton";
 import "../../styles/board.css";
-import { initialBoard, selectApiLevel } from "./redux";
+
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import Count from "./Count";
-import UndoButton from "./UndoButton";
+import UndoButton from "../Buttons/UndoButton";
+import { initialBoard, selectGame } from "../../redux/slices/game";
+import CluesColumns from "../Clues/CluesColumns";
+import CluesLines from "../Clues/CluesLines";
+import Board from "../Board";
 
 /** Detail des elements
  * ZONE : id=line_.._column_..
@@ -31,9 +32,9 @@ import UndoButton from "./UndoButton";
 
 const Game: React.FC = () => {
   const dispatch = useAppDispatch();
-  const level = useAppSelector(selectApiLevel);
+  const level = useAppSelector(selectGame).level;
   dispatch(initialBoard(level));
-  
+
   return (
     <div id="board_game">
       <Count />

@@ -1,15 +1,18 @@
 import { useAppSelector } from "../../../redux/hooks";
-import { selectApiBoard, selectApiLevel } from "../redux";
 import "../../../styles/count.css";
+import { selectGame } from "../../../redux/slices/game";
 
 const Count: React.FC = () => {
-  const board = useAppSelector(selectApiBoard);
-  const level = useAppSelector(selectApiLevel);
+  const game = useAppSelector(selectGame);
+  const level = game.level;
+  const board = game.board;
 
   return (
     <div>
       <p id="count_fill">{board.currentFill + " / " + level.nb_fill}</p>
-      <p id="alert_count" className="alert_hidden">To much filled zone</p>
+      <p id="alert_count" className="alert_hidden">
+        To much filled zone
+      </p>
     </div>
   );
 };
