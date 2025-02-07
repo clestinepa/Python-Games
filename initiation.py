@@ -9,13 +9,13 @@ def verify_lvl():
 def init_clues_columns(screen):
     x = 0
     for clues in lvl.CLUES_COLUMNS:
-        mng.update_clues(screen, "COLUMN", x, "DEFAULT")
+        mng.update_clues(screen, "COLUMN", x)
         x += 1
 
 def init_clues_lines(screen):
     y = 0
     for clues in lvl.CLUES_LINES:
-        mng.update_clues(screen, "LINE", y, "DEFAULT")
+        mng.update_clues(screen, "LINE", y)
         y += 1
 
 def init_board(screen):
