@@ -47,10 +47,16 @@ def autoCross(screen: pygame.Surface, cells_to_check: list[Literal["EMPTY", "FIL
         if cell == "EMPTY":
             print(f"la {cell_index} est vide")
             if type == "LINE":
-                x, y= cell_index, index
+                update_cell(screen, cell_index, index, "CROSS")
+                cells_to_check = []
+                for line in cells:
+                    cells_to_check.append(line[cell_index])
+                checkCellsConstraints(screen, clues, cells_to_check, "COLUMN", cell_index)
             else:
-                x, y= index, cell_index
-            update_cell(screen, x, y, "CROSS")
+                update_cell(screen, index, cell_index, "CROSS")
+                clues = lvl.CLUES_LINES[cell_index]
+                cells_to_check = cells[cell_index]
+                checkCellsConstraints(screen, clues, cells_to_check, "LINE", cell_index)
         cell_index += 1
 
 #EVENT
@@ -181,8 +187,10 @@ def checkCellsConstraints(screen: pygame.Surface, clues: list[int], cells_to_che
     clue_states = ["DEFAULT" for _ in range(len(clues))]
     if type == "LINE" :
         clues_state_lines[index] = clues_state
+        clue_states_lines[index] = clue_states
     else:
         clues_state_columns[index] = clues_state
+        clue_states_columns[index] = clue_states
     
     #areas === clues => all done
     if str(areas) == str(clues):
