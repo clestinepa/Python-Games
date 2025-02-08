@@ -18,7 +18,6 @@ def update_clues(screen, type, index):
         index_clue = len(lvl.CLUES_LINES[index]) - 1
         place_clue = 0
         for clue in lvl.CLUES_LINES[index][::-1]:
-            print(index_clue)
             font = pygame.font.Font(None, gd.FONT_CLUE)
             clue_text = font.render(f"{clue}", True, gd.get_color_clue(clue_states_lines[index][index_clue]))
             screen.blit(clue_text, (gd.get_x_clue_line(clue_text, place_clue), gd.get_y_clue_line(clue_text, index)))
@@ -42,8 +41,20 @@ def update_cell(screen, x, y, action):
     pygame.draw.rect(screen, color=gd.get_color_cell_border(), rect=(gd.get_x_cell_border(x) , gd.get_y_cell_border(y), gd.get_size_cell_border(), gd.get_size_cell_border()))
     pygame.draw.rect(screen, color=gd.get_color_cell_bg(action), rect=(gd.get_x_cell_bg(x), gd.get_y_cell_bg(y), gd.get_size_cell_bg(), gd.get_size_cell_bg()))
 
+def autoCross(screen: pygame.Surface, cells_to_check: list[Literal["EMPTY", "FILL", "CROSS"]], type: Literal["LINE", "COLUMN"] , index: int):
+    cell_index = 0
+    for cell in cells_to_check:
+        if cell == "EMPTY":
+            print(f"la {cell_index} est vide")
+            if type == "LINE":
+                x, y= cell_index, index
+            else:
+                x, y= index, cell_index
+            update_cell(screen, x, y, "CROSS")
+        cell_index += 1
+
 #EVENT
-def get_cell_click(pos):
+def get_cell_click(pos: tuple[int, int]):
     x = pos[0] - gd.get_x_board() - gd.BORDER_OUTSIDE_SIZE
     y = pos[1] - gd.get_y_board() - gd.BORDER_OUTSIDE_SIZE
     if x > 10*gd.CELL_SIZE or y > 10*gd.CELL_SIZE or x < 0 or y < 0:
@@ -71,3 +82,150 @@ def event_manager():
                         action = "CROSS"
     return running, action, x_cell, y_cell 
 
+#CONSTRAINTS
+def buildAreas(cells_to_check: list[Literal["EMPTY", "FILL", "CROSS"]]): 
+    areas = []
+    onArea = False
+    nb_cross = 0
+    nb_fill = 0
+    for cell in cells_to_check:
+        if cell == "FILL":
+            if not onArea:
+                onArea = True
+                areas.append(0)
+            areas[len(areas) - 1] += 1
+            nb_fill += 1
+        else:
+            if onArea:
+                onArea = False
+            if cell == "CROSS":
+                nb_cross += 1
+    return areas, nb_cross, nb_fill     
+
+def checkArea(index_area_on_check: int, clues: list[int], areas: list[int], reverse=False, byEmpty=False):
+    if reverse:
+        index_clue = len(clues) - 1 - index_area_on_check
+    else:
+        index_clue = index_area_on_check
+    print(f"area qu'on va de check :{index_clue}, ce qui donne {areas} vs {clues}")
+    if not byEmpty and areas[index_area_on_check] == clues[index_clue]:
+        return "DONE"
+    else:
+        if byEmpty and not(areas[index_area_on_check] > clues[index_clue]):
+            return "DEFAULT"
+        else:
+            return "ERROR"
+
+def checkValidityAreasStartLeft(clues: list[int], cells_to_check: list[Literal["EMPTY", "FILL", "CROSS"]], areas: list[int], type: Literal["LINE", "COLUMN"] , index: int):
+    if type == "LINE":
+        clue_states = clue_states_lines[index]
+        clues_state = clues_state_lines[index]
+    else:
+        clue_states = clue_states_columns[index]
+        clues_state = clues_state_columns[index]
+        
+    index_area_on_check = -1
+    onCheck = False
+    cell_index = 0
+    for cell in cells_to_check:
+        cell_index += 1
+        #check an empty zone
+        if cell == "EMPTY" :
+            #if we were checking an area => end the check
+            if onCheck:
+                clue_state = checkArea(index_area_on_check, clues, areas, byEmpty=True)
+                if clue_state == "ERROR":
+                    clues_state = "ERROR"
+                clue_states[index_area_on_check] = clue_state
+                print("STOP CHECK")
+            #if we didn't check every areas, we can't continue here so we check on the other side
+            if index_area_on_check != len(areas) - 1:
+                None
+                # clue_states, clues_state = checkValidityAreasStartRight(clues_state, clue_states, index_area_on_check+1, clues.reverse(), cells_to_check.reverse(), areas.reverse())
+            #we are done !
+            break
+        #check a filled zone
+        elif cell == "FILL":
+            #we find a new area to check
+            if not onCheck :
+                onCheck = True
+                index_area_on_check += 1
+                #there is too much areas => fail
+                if index_area_on_check > len(clues) - 1:
+                    clues_state = "ERROR"
+                    clue_states = ["DEFAULT" for _ in range(len(clues))]
+                    break
+            #if we arrive at the end of the row
+            if cell_index == lvl.NB_CELL:
+                clue_state = checkArea(index_area_on_check, clues, areas)
+                if clue_state == "ERROR":
+                    clues_state = "ERROR"
+                clue_states[index_area_on_check] = clue_state
+        #check a crossed zone
+        elif cell == "CROSS":
+            #if we were checking an area => end the check
+            if onCheck:
+                onCheck = False
+                clue_state = checkArea(index_area_on_check, clues, areas)
+                if clue_state == "ERROR":
+                    clues_state = "ERROR"
+                clue_states[index_area_on_check] = clue_state
+    if type == "LINE":
+        clue_states_lines[index] = clue_states
+        clues_state_lines[index] = clues_state
+    else:
+        clue_states_columns[index] = clue_states
+        clues_state_columns[index] = clues_state
+                
+def checkCellsConstraints(screen: pygame.Surface, clues: list[int], cells_to_check: list[Literal["EMPTY", "FILL", "CROSS"]], type: Literal["LINE", "COLUMN"] , index: int):
+    #build the areas
+    areas, nb_cross, nb_fill = buildAreas(cells_to_check)
+    print(f"Areas : {areas}, Nb_cross : {nb_cross}, Nb_fill : {nb_fill}")
+    
+    clues_state = "DEFAULT"
+    clue_states = ["DEFAULT" for _ in range(len(clues))]
+    
+    #areas === clues => all done
+    if str(areas) == str(clues):
+        print("Tout parfait ALL_DONE")
+        clues_state = "DONE"
+        clue_states = ["ALL_DONE" for _ in range(len(clues))]
+        autoCross(screen, cells_to_check, type, index)
+        
+    #too much "validate" areas or all zones are crossed => fail
+    elif (len(areas) > len(clues) and nb_cross + nb_fill == lvl.NB_CELL) or (len(areas) == 0 and nb_cross == lvl.NB_CELL):
+        print("Tout cross OU Trop d'areas")
+        clues_state = "ERROR"
+        clue_states = ["DEFAULT" for _ in range(len(clues))]
+    
+    #not perfect areas => check Areas
+    elif len(areas) != 0:
+        print("Faut vérifier !")
+        checkValidityAreasStartLeft(clues, cells_to_check, areas, type, index)
+    
+    if type == "LINE" :
+        clues_state_lines[index] = clues_state
+        clue_states_lines[index] = clue_states
+    else:
+        clues_state_columns[index] = clues_state
+        clue_states_columns[index] = clue_states
+    update_clues(screen, type, index)
+        
+def checkConstraints(screen: pygame.Surface, x: int, y: int):
+    #check constraint line
+    print("Check constraint line")
+    clues = lvl.CLUES_LINES[y]
+    cells_to_check = cells[y]
+    checkCellsConstraints(screen, clues, cells_to_check, "LINE", y)
+    
+    print("")
+    
+    #check constraint column
+    print("Check constraint column")
+    clues = lvl.CLUES_COLUMNS[x]
+    cells_to_check = []
+    for line in cells:
+        cells_to_check.append(line[x])
+    checkCellsConstraints(screen, clues, cells_to_check, "COLUMN", x)
+    
+    print("")

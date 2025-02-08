@@ -24,6 +24,7 @@ else :
         
         if action :            
             up.update_cell(screen, x_cell, y_cell, action)
+            up.checkConstraints(screen, x_cell, y_cell)
         
         pygame.display.flip()
         # clock.tick(5)  # Contrôle la vitesse du jeu
