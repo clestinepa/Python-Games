@@ -118,11 +118,11 @@ def checkArea(index_area_on_check: int, clues: list[int], areas: list[int], reve
 
 def checkValidityAreasStartLeft(clues: list[int], cells_to_check: list[Literal["EMPTY", "FILL", "CROSS"]], areas: list[int], type: Literal["LINE", "COLUMN"] , index: int):
     if type == "LINE":
-        clue_states = clue_states_lines[index]
         clues_state = clues_state_lines[index]
+        clue_states = clue_states_lines[index]
     else:
-        clue_states = clue_states_columns[index]
         clues_state = clues_state_columns[index]
+        clue_states = clue_states_columns[index]
         
     index_area_on_check = -1
     onCheck = False
@@ -170,12 +170,7 @@ def checkValidityAreasStartLeft(clues: list[int], cells_to_check: list[Literal["
                 if clue_state == "ERROR":
                     clues_state = "ERROR"
                 clue_states[index_area_on_check] = clue_state
-    if type == "LINE":
-        clue_states_lines[index] = clue_states
-        clues_state_lines[index] = clues_state
-    else:
-        clue_states_columns[index] = clue_states
-        clues_state_columns[index] = clues_state
+    return clues_state, clue_states
                 
 def checkCellsConstraints(screen: pygame.Surface, clues: list[int], cells_to_check: list[Literal["EMPTY", "FILL", "CROSS"]], type: Literal["LINE", "COLUMN"] , index: int):
     #build the areas
@@ -184,6 +179,10 @@ def checkCellsConstraints(screen: pygame.Surface, clues: list[int], cells_to_che
     
     clues_state = "DEFAULT"
     clue_states = ["DEFAULT" for _ in range(len(clues))]
+    if type == "LINE" :
+        clues_state_lines[index] = clues_state
+    else:
+        clues_state_columns[index] = clues_state
     
     #areas === clues => all done
     if str(areas) == str(clues):
@@ -201,7 +200,7 @@ def checkCellsConstraints(screen: pygame.Surface, clues: list[int], cells_to_che
     #not perfect areas => check Areas
     elif len(areas) != 0:
         print("Faut vérifier !")
-        checkValidityAreasStartLeft(clues, cells_to_check, areas, type, index)
+        clues_state, clue_states = checkValidityAreasStartLeft(clues, cells_to_check, areas, type, index)
     
     if type == "LINE" :
         clues_state_lines[index] = clues_state
