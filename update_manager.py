@@ -45,6 +45,7 @@ def autoCross(screen: pygame.Surface, cells_to_check: list[Literal["EMPTY", "FIL
         if cell == "EMPTY":
             if type == "LINE":
                 update_cell(screen, cell_index, index, "CROSS")
+                clues = lvl.CLUES_COLUMNS[cell_index]
                 cells_to_check = []
                 for line in cells:
                     cells_to_check.append(line[cell_index])
