@@ -61,7 +61,7 @@ def get_cell_click(pos: tuple[int, int]):
     x = pos[0] - gd.get_x_board() - gd.BORDER_OUTSIDE_SIZE
     y = pos[1] - gd.get_y_board() - gd.BORDER_OUTSIDE_SIZE
     if x > 10*gd.CELL_SIZE or y > 10*gd.CELL_SIZE or x < 0 or y < 0:
-        return None
+        return None, None
     else :
         return (int(x/gd.CELL_SIZE),int(y/gd.CELL_SIZE))
    
@@ -73,16 +73,17 @@ def event_manager():
                 running = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 x_cell, y_cell = get_cell_click(event.pos)
-                if event.button == 1:
-                    if cells[y_cell][x_cell] == "FILL":
-                        action = "EMPTY"
-                    else:
-                        action = "FILL"
-                if event.button == 3:
-                    if cells[y_cell][x_cell] == "CROSS":
-                        action = "EMPTY"
-                    else:
-                        action = "CROSS"
+                if x_cell != None and y_cell != None:
+                    if event.button == 1:
+                        if cells[y_cell][x_cell] == "FILL":
+                            action = "EMPTY"
+                        else:
+                            action = "FILL"
+                    if event.button == 3:
+                        if cells[y_cell][x_cell] == "CROSS":
+                            action = "EMPTY"
+                        else:
+                            action = "CROSS"
     return running, action, x_cell, y_cell 
 
 #CONSTRAINTS
