@@ -1,7 +1,8 @@
 import pygame
 import initiation as init
-import game_design as gd
+import design.game_design as gd
 import update_manager as up
+import victory as v
 
 pygame.init()
 
@@ -15,17 +16,20 @@ if not(init.verify_lvl()) :
 else :
     init.init_game(screen)
 
-    running = True
+    running, victory = True, False
     while running:
         
         action, x_cell, y_cell = None, None, None
         new_running, action, x_cell, y_cell = up.event_manager()
         running = new_running
         
-        if action :            
+        if not victory and action:            
             up.update_cell(screen, x_cell, y_cell, action)
             up.checkConstraints(screen, x_cell, y_cell)
-        
+            victory = up.checkVictory()
+            if victory:
+                v.display_victory(screen)
+       
         pygame.display.flip()
         # clock.tick(5)  # Contrôle la vitesse du jeu
             

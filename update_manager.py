@@ -1,7 +1,7 @@
-from typing import Literal
 import pygame
+from typing import Literal
 import level_detail as lvl
-import game_design as gd
+import design.game_design as gd
 
 cells = [["EMPTY"] * lvl.NB_CELL for _ in range(lvl.NB_CELL)]
 clue_states_lines = [["DEFAULT"] * len(lvl.CLUES_LINES[index]) for index in range(lvl.NB_CELL)]
@@ -118,12 +118,11 @@ def checkArea(clue: int, area: int, byEmpty=False):
         else:
             return "ERROR"
 
-def checkValidityAreasStartRight(clues: list[int], index_area_already_check: int, clue_states: list[Literal["DONE", "DEFAULT", "ERROR", "ALL_DONE"]], areas: list[int]):
+def checkValidityAreasStartRight(clues: list[int], index_area_already_check: int, clues_state: Literal["DONE", "DEFAULT", "ERROR"], clue_states: list[Literal["DONE", "DEFAULT", "ERROR", "ALL_DONE"]], areas: list[int]):
     areas_already_check = index_area_already_check + 1
     clues.reverse()
     clue_states.reverse()
     areas.reverse()
-    clues_state = "DEFAULT"
     index_area_on_check = -1
     for i in range(len(areas)):
         area = areas[i]
@@ -132,8 +131,8 @@ def checkValidityAreasStartRight(clues: list[int], index_area_already_check: int
             break
         #if we find an area, we check it !
         if area > 0:
-            index_area_on_check += 1            
-            if areas[i+1] == 0 and index_area_on_check + 1 + areas_already_check > len(clues):
+            index_area_on_check += 1
+            if (areas[i+1] == 0 and index_area_on_check + 1 + areas_already_check > len(clues)) or clue_states[index_area_on_check] != "DEFAULT":
                 clues_state = "ERROR"
                 clue_states = ["DEFAULT" for _ in range(len(clues))]
                 break
@@ -157,7 +156,7 @@ def checkValidityAreasStartLeft(clues: list[int], areas: list[int]):
         if area == -1:
             #if there is still some areas to check, we check from right
             if index_area_on_check != len(areas) - 1:
-                clues_state, clue_states = checkValidityAreasStartRight(clues, index_area_on_check, clue_states, areas)
+                clues_state, clue_states = checkValidityAreasStartRight(clues, index_area_on_check, clues_state, clue_states, areas)
             break
         #if we find an area, we check it !
         if area > 0:
@@ -219,4 +218,6 @@ def checkConstraints(screen: pygame.Surface, x: int, y: int):
     for line in cells:
         cells_to_check.append(line[x])
     checkCellsConstraints(screen, clues, cells_to_check, "COLUMN", x)
-    
+
+def checkVictory():
+    return all(clues == "DONE" for clues in clues_state_lines) and all(clues == "DONE" for clues in clues_state_columns)

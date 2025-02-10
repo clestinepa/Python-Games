@@ -1,48 +1,41 @@
 import level_detail as lvl
+import design.global_design as d
 
-# COLORS
-WHITE = (255, 255, 255, 255)
-DARK = (94, 116, 138, 255)
-LIGHT = (220, 233, 252, 255)
-MEDIUM = (167, 191, 215, 255)
-MAIN = (106, 164, 221, 255)
-COMPLEMENTARY = (205, 92, 92, 255)
+COLOR_BG = d.WHITE
 
-COLOR_BG = WHITE
-
-COLOR_BORDER_BOARD = DARK
+COLOR_BORDER_BOARD = d.DARK
 # COLOR_BORDER_CELL_HOVER = MAIN
 
 def get_color_cell_bg(type):
     if type == "FILL" :
-        return MAIN
+        return d.MAIN
     if type == "CROSS" :
-        return MEDIUM
+        return d.MEDIUM
     else :
-        return WHITE
+        return d.WHITE
 def get_color_cell_border():
-    return LIGHT
+    return d.LIGHT
 def get_color_clues_border(type):
     if type == "ERROR" :
-        return COMPLEMENTARY
+        return d.COMPLEMENTARY
     else :
-        return MEDIUM
+        return d.MEDIUM
 def get_color_clues_bg(type):
     if type == "ERROR" :
-        return MEDIUM
+        return d.MEDIUM
     if type == "DONE" :
-        return WHITE
+        return d.WHITE
     else:
-        return MEDIUM
+        return d.MEDIUM
 def get_color_clue(type):
     if type == "ERROR" :
-        return COMPLEMENTARY
+        return d.COMPLEMENTARY
     if type == "DONE" :
-        return LIGHT
+        return d.LIGHT
     if type == "ALL_DONE" :
-        return MEDIUM
+        return d.MEDIUM
     else:
-        return DARK
+        return d.DARK
     
     
 # SIZE
@@ -165,3 +158,5 @@ def get_width_game():
     return get_x_board() + get_size_board() + MARGIN_GAME
 def get_height_game():
     return get_y_board() + get_size_board() + MARGIN_GAME
+
+print(get_width_game(), get_height_game())

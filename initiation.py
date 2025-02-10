@@ -1,7 +1,8 @@
-import level_detail as lvl
-import game_design as gd
-import update_manager as mng
 import pygame
+import level_detail as lvl
+import design.game_design as gd
+import design.global_design as d
+import update_manager as mng
 
 def verify_lvl():
     return not(len(lvl.CLUES_COLUMNS) != lvl.NB_CELL or len(lvl.CLUES_LINES) != lvl.NB_CELL)
@@ -28,7 +29,7 @@ def init_board(screen):
         pygame.draw.rect(screen, color=gd.COLOR_BORDER_BOARD, rect=(gd.get_x_border_inside_h(), gd.get_y_border_inside_h(i), gd.get_width_border_inside_h() , gd.get_height_border_inside_h()))
   
 def init_game(screen):
-    screen.fill(gd.WHITE)
+    screen.fill(gd.COLOR_BG)
     init_clues_columns(screen)
     init_clues_lines(screen)
     init_board(screen)
