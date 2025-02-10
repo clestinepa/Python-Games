@@ -2,7 +2,7 @@ import pygame
 import level_detail as lvl
 import design.game_design as gd
 import design.global_design as d
-import update_manager as mng
+import domain.update_manager as mng
 
 def verify_lvl():
     return not(len(lvl.CLUES_COLUMNS) != lvl.NB_CELL or len(lvl.CLUES_LINES) != lvl.NB_CELL)

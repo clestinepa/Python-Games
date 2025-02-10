@@ -1,8 +1,8 @@
 import pygame
-import initiation as init
+import domain.initiation as init
 import design.game_design as gd
-import update_manager as up
-import victory as v
+import domain.update_manager as up
+import domain.victory as v
 
 pygame.init()
 

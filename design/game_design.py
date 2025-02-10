@@ -158,5 +158,3 @@ def get_width_game():
     return get_x_board() + get_size_board() + MARGIN_GAME
 def get_height_game():
     return get_y_board() + get_size_board() + MARGIN_GAME
-
-print(get_width_game(), get_height_game())
