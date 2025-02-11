@@ -19,7 +19,7 @@ def update_clues(screen, type, index):
         for clue in lvl.CLUES_LINES[index][::-1]:
             font = pygame.font.Font(None, gd.FONT_CLUE)
             clue_text = font.render(f"{clue}", True, gd.get_color_clue(clue_states_lines[index][index_clue]))
-            screen.blit(clue_text, (gd.get_x_clue_line(clue_text, place_clue), gd.get_y_clue_line(clue_text, index)))
+            screen.blit(clue_text, (gd.get_x_clue_line(clue_text, place_clue), gd.get_y_clue_line(index)))
             index_clue -= 1
             place_clue += 1
     else:
@@ -30,7 +30,7 @@ def update_clues(screen, type, index):
         for clue in lvl.CLUES_COLUMNS[index][::-1]:
             font = pygame.font.Font(None, gd.FONT_CLUE)
             clue_text = font.render(f"{clue}", True, gd.get_color_clue(clue_states_columns[index][index_clue]))
-            screen.blit(clue_text, (gd.get_x_clue_column(clue_text, index), gd.get_y_clue_column(clue_text, place_clue)))
+            screen.blit(clue_text, (gd.get_x_clue_column(clue_text, index), gd.get_y_clue_column(place_clue)))
             index_clue -= 1
             place_clue += 1
 
@@ -61,7 +61,7 @@ def autoCross(screen: pygame.Surface, cells_to_check: list[Literal["EMPTY", "FIL
 def get_cell_click(pos: tuple[int, int]):
     x = pos[0] - gd.get_x_board() - gd.BORDER_OUTSIDE_SIZE
     y = pos[1] - gd.get_y_board() - gd.BORDER_OUTSIDE_SIZE
-    if x > 10*gd.CELL_SIZE or y > 10*gd.CELL_SIZE or x < 0 or y < 0:
+    if x > lvl.NB_CELL*gd.CELL_SIZE or y > lvl.NB_CELL*gd.CELL_SIZE or x < 0 or y < 0:
         return None, None
     else :
         return (int(x/gd.CELL_SIZE),int(y/gd.CELL_SIZE))

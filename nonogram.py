@@ -23,7 +23,7 @@ else :
         new_running, action, x_cell, y_cell = up.event_manager()
         running = new_running
         
-        if not victory and action:            
+        if not(victory) and action:            
             up.update_cell(screen, x_cell, y_cell, action)
             up.checkConstraints(screen, x_cell, y_cell)
             victory = up.checkVictory()
