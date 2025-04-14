@@ -1,7 +1,6 @@
 import pygame
 import level_detail as lvl
 import design.game_design as gd
-import design.global_design as d
 import domain.update_manager as mng
 
 def verify_lvl():
@@ -20,11 +19,11 @@ def init_clues_lines(screen):
         y += 1
 
 def init_board(screen):
-    pygame.draw.rect(screen, color=gd.COLOR_BORDER_BOARD, rect=(gd.get_x_board(), gd.get_y_board(), gd.get_size_board(), gd.get_size_board()))
+    pygame.draw.rect(screen, color=gd.COLOR_BORDER_BOARD, rect=(gd.get_x_board(), gd.get_y_board(), gd.BOARD_SIZE, gd.BOARD_SIZE))
     for x in range(lvl.NB_CELL):
         for y in range(lvl.NB_CELL):
             mng.update_cell(screen, x, y, "EMPTY")
-    for i in range(gd.NB_BORDER_INSIDE):
+    for i in range(gd.NB_LINE_GROUP_CELLS):
         pygame.draw.rect(screen, color=gd.COLOR_BORDER_BOARD, rect=(gd.get_x_border_inside_v(i), gd.get_y_border_inside_v(), gd.get_width_border_inside_v() , gd.get_height_border_inside_v()))
         pygame.draw.rect(screen, color=gd.COLOR_BORDER_BOARD, rect=(gd.get_x_border_inside_h(), gd.get_y_border_inside_h(i), gd.get_width_border_inside_h() , gd.get_height_border_inside_h()))
   

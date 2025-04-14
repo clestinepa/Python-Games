@@ -1,32 +1,43 @@
 import pygame
-import domain.initiation as init
-import design.game_design as gd
-import domain.update_manager as up
+import init.initiation_game as ig
+import init.initiation_choice as ic
+import design.global_design as d
+import domain.choice_manager as cm
+import domain.update_manager as um
 import domain.victory as v
 
 pygame.init()
 
-screen = pygame.display.set_mode((gd.get_width_game(), gd.get_height_game()))
+screen = pygame.display.set_mode((d.SIZE_WINDOW, d.SIZE_WINDOW))
 pygame.display.set_caption("NonoGram")
 clock = pygame.time.Clock()
 
-if not(init.verify_lvl()) :
+running = True
+running_choice = True
+while running and running_choice:
+    ic.init_choice(screen)
+    new_running, new_running_choice = cm.event_manager()
+    running, running_choice = new_running, new_running_choice
+    
+    pygame.display.flip()
+
+if not(ig.verify_lvl()) :
     print("Les détails du niveau ne sont pas correctement paramétrés")
     pygame.quit()
 else :
-    init.init_game(screen)
+    ig.init_game(screen)
 
-    running, victory = True, False
-    while running:
+    running_game, victory = True, False
+    while running and running_game:
         
         action, x_cell, y_cell = None, None, None
-        new_running, action, x_cell, y_cell = up.event_manager()
+        new_running, action, x_cell, y_cell = um.event_manager()
         running = new_running
         
         if not(victory) and action:            
-            up.update_cell(screen, x_cell, y_cell, action)
-            up.checkConstraints(screen, x_cell, y_cell)
-            victory = up.checkVictory()
+            um.update_cell(screen, x_cell, y_cell, action)
+            um.checkConstraints(screen, x_cell, y_cell)
+            victory = um.checkVictory()
             if victory:
                 v.display_victory(screen)
        

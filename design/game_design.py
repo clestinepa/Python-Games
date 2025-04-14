@@ -2,9 +2,7 @@ import level_detail as lvl
 import design.global_design as d
 
 COLOR_BG = d.WHITE
-
 COLOR_BORDER_BOARD = d.DARK
-# COLOR_BORDER_CELL_HOVER = MAIN
 
 def get_color_cell_bg(type):
     if type == "FILL" :
@@ -13,8 +11,11 @@ def get_color_cell_bg(type):
         return d.MEDIUM
     else :
         return d.WHITE
-def get_color_cell_border():
-    return d.LIGHT
+def get_color_cell_border(hover=False):
+    if hover:
+        return d.MAIN
+    else:
+        return d.LIGHT
 def get_color_clues_border(type):
     if type == "ERROR" :
         return d.COMPLEMENTARY
@@ -37,39 +38,43 @@ def get_color_clue(type):
     else:
         return d.DARK
     
-    
-# SIZE
-NB_BORDER_INSIDE = lvl.NB_CELL // 5 - 1
-
 CELL_SIZE = 30
-MARGIN_GAME = CELL_SIZE * 2
 
-BORDER_INSIDE_SIZE = 2
-BORDER_OUTSIDE_SIZE = 4
-BORDER_CELL_SIZE = 1
-BORDER_CLUE_SIZE = 1
-BORDER_CLUE_ERROR_SIZE = 2
-BORDER_RADIUS = int(CELL_SIZE / 6)
-
-FONT_CLUE = int(CELL_SIZE / 2)
-MARGIN_CLUE = int(CELL_SIZE / 10)
-CLUE_HEIGHT = int(CELL_SIZE/3) #propre a pygame.font.Font, équivalent à clue_text.get_height()
+#CLUES
+BORDER_INSIDE_CLUE_SIZE = 1
+BORDER_INSIDE_CLUE_ERROR_SIZE = 2
+MARGIN_CLUE = 3
+FONT_CLUE = 15
+CLUE_HEIGHT = d.get_height_text(FONT_CLUE)
 max_clues = max(max(len(clues) for clues in lvl.CLUES_LINES), max(len(clues) for clues in lvl.CLUES_COLUMNS))
 CLUES_LONG_SIZE = CLUE_HEIGHT*max_clues + MARGIN_CLUE*(max_clues+2)
-CLUES_SHORT_SIZE = MARGIN_CLUE * 7
+CLUES_SHORT_SIZE = (2*CELL_SIZE)/3
+BORDER_CLUES_RADIUS = d.BORDER_RADIUS
+
+#BOARD
+BORDER_BOARD_SIZE = 4
+NB_CELLS_BY_GROUP = 5
+NB_LINE_GROUP_CELLS = lvl.NB_CELL // NB_CELLS_BY_GROUP - 1
+LINE_GROUP_CELLS_SIZE = 2
+BORDER_INSIDE_CELL_SIZE = 1
+BOARD_SIZE = lvl.NB_CELL*CELL_SIZE + BORDER_BOARD_SIZE*2 + LINE_GROUP_CELLS_SIZE*NB_LINE_GROUP_CELLS
+
+#GAME
+GAME_SIZE = BOARD_SIZE + CLUES_LONG_SIZE + MARGIN_CLUE
+MARGIN_GAME = (d.SIZE_WINDOW-GAME_SIZE)/2
 
 #CLUES
 def get_x_clues_columns():
-    return get_x_board() + BORDER_OUTSIDE_SIZE
+    return get_x_board() + BORDER_BOARD_SIZE
 def get_y_clues_columns():
     return MARGIN_GAME
 def get_x_clues_lines():
     return MARGIN_GAME
 def get_y_clues_lines():
-    return get_y_board() + BORDER_OUTSIDE_SIZE
+    return get_y_board() + BORDER_BOARD_SIZE
 #column
 def get_x_clues_border_column(x):
-    return get_x_clues_columns() + (CELL_SIZE-CLUES_SHORT_SIZE)/2 + x*CELL_SIZE + ((x+1) // 5)*BORDER_INSIDE_SIZE
+    return get_x_clues_columns() + (CELL_SIZE-CLUES_SHORT_SIZE)/2 + x*CELL_SIZE + ((x+1) // NB_CELLS_BY_GROUP)*LINE_GROUP_CELLS_SIZE
 def get_y_clues_border_column():
     return get_y_clues_columns()
 def get_width_clues_border_column():
@@ -77,36 +82,34 @@ def get_width_clues_border_column():
 def get_height_clues_border_column():
     return CLUES_LONG_SIZE
 def get_x_clues_bg_column(x):
-    return get_x_clues_border_column(x) + BORDER_CLUE_SIZE
+    return get_x_clues_border_column(x) + BORDER_INSIDE_CLUE_SIZE
 def get_y_clues_bg_column():
-    return get_y_clues_border_column() + BORDER_CLUE_SIZE
+    return get_y_clues_border_column() + BORDER_INSIDE_CLUE_SIZE
 def get_width_clues_bg_column():
-    return get_width_clues_border_column() - 2*BORDER_CLUE_SIZE
+    return get_width_clues_border_column() - 2*BORDER_INSIDE_CLUE_SIZE
 def get_height_clues_bg_column():
-    return get_height_clues_border_column() - 2*BORDER_CLUE_SIZE
-
+    return get_height_clues_border_column() - 2*BORDER_INSIDE_CLUE_SIZE
 def get_x_clue_column(clue_text, x):
     return get_x_clues_bg_column(x) + 0.5 + (get_width_clues_bg_column()-clue_text.get_width())/2
 def get_y_clue_column(place_clue):
     return get_y_clues_bg_column() + get_height_clues_bg_column() - (place_clue+1)*(MARGIN_CLUE + CLUE_HEIGHT)
-
 #line
 def get_x_clues_border_line():
     return get_x_clues_lines()
 def get_y_clues_border_line(y):
-    return get_y_clues_lines() + (CELL_SIZE-CLUES_SHORT_SIZE)/2 + y*CELL_SIZE + ((y+1) // 5)*BORDER_INSIDE_SIZE
+    return get_y_clues_lines() + (CELL_SIZE-CLUES_SHORT_SIZE)/2 + y*CELL_SIZE + ((y+1) // NB_CELLS_BY_GROUP)*LINE_GROUP_CELLS_SIZE
 def get_width_clues_border_line():
     return CLUES_LONG_SIZE
 def get_height_clues_border_line():
     return CLUES_SHORT_SIZE
 def get_x_clues_bg_line():
-    return get_x_clues_border_line() + BORDER_CLUE_SIZE
+    return get_x_clues_border_line() + BORDER_INSIDE_CLUE_SIZE
 def get_y_clues_bg_line(y):
-    return get_y_clues_border_line(y) + BORDER_CLUE_SIZE
+    return get_y_clues_border_line(y) + BORDER_INSIDE_CLUE_SIZE
 def get_width_clues_bg_line():
-    return get_width_clues_border_line() - 2*BORDER_CLUE_SIZE
+    return get_width_clues_border_line() - 2*BORDER_INSIDE_CLUE_SIZE
 def get_height_clues_bg_line():
-    return get_height_clues_border_line() - 2*BORDER_CLUE_SIZE
+    return get_height_clues_border_line() - 2*BORDER_INSIDE_CLUE_SIZE
 
 def get_x_clue_line(clue_text, place_clue):
     return get_x_clues_bg_line() + get_width_clues_bg_line() - (place_clue+1)*(MARGIN_CLUE*2+clue_text.get_width()) + MARGIN_CLUE
@@ -118,45 +121,36 @@ def get_x_board():
     return MARGIN_GAME + get_width_clues_border_line() + MARGIN_CLUE
 def get_y_board():
     return MARGIN_GAME + get_height_clues_border_column() + MARGIN_CLUE
-def get_size_board():
-    return lvl.NB_CELL*CELL_SIZE + BORDER_OUTSIDE_SIZE*2 + BORDER_INSIDE_SIZE*NB_BORDER_INSIDE
 
 #border inside
 def get_x_border_inside_v(i):
-    return get_x_board() + BORDER_OUTSIDE_SIZE + BORDER_INSIDE_SIZE*i + 5*(i+1)*CELL_SIZE
+    return get_x_board() + BORDER_BOARD_SIZE + LINE_GROUP_CELLS_SIZE*i + NB_CELLS_BY_GROUP*(i+1)*CELL_SIZE
 def get_y_border_inside_v():
     return get_y_clues_columns()
 def get_width_border_inside_v():
-    return BORDER_INSIDE_SIZE
+    return LINE_GROUP_CELLS_SIZE
 def get_height_border_inside_v():
-    return get_height_clues_border_column() + MARGIN_CLUE + get_size_board()
+    return get_height_clues_border_column() + MARGIN_CLUE + BOARD_SIZE
 
 def get_x_border_inside_h():
     return get_x_clues_lines()
 def get_y_border_inside_h(i):
-    return get_y_board() + BORDER_OUTSIDE_SIZE + BORDER_INSIDE_SIZE*i + 5*(i+1)*CELL_SIZE
+    return get_y_board() + BORDER_BOARD_SIZE + LINE_GROUP_CELLS_SIZE*i + NB_CELLS_BY_GROUP*(i+1)*CELL_SIZE
 def get_width_border_inside_h():
-    return get_width_clues_border_line() + MARGIN_CLUE + get_size_board()
+    return get_width_clues_border_line() + MARGIN_CLUE + BOARD_SIZE
 def get_height_border_inside_h():
-    return BORDER_INSIDE_SIZE
+    return LINE_GROUP_CELLS_SIZE
 
 #cells
 def get_x_cell_border(x):
-    return get_x_board() + BORDER_OUTSIDE_SIZE + x*CELL_SIZE + (x // 5)*BORDER_INSIDE_SIZE
+    return get_x_board() + BORDER_BOARD_SIZE + x*CELL_SIZE + (x // NB_CELLS_BY_GROUP)*LINE_GROUP_CELLS_SIZE
 def get_y_cell_border(y):
-    return get_y_board() + BORDER_OUTSIDE_SIZE + y*CELL_SIZE + (y // 5)*BORDER_INSIDE_SIZE
+    return get_y_board() + BORDER_BOARD_SIZE + y*CELL_SIZE + (y // NB_CELLS_BY_GROUP)*LINE_GROUP_CELLS_SIZE
 def get_size_cell_border():
     return CELL_SIZE
 def get_x_cell_bg(x):
-    return get_x_cell_border(x) + BORDER_CELL_SIZE
+    return get_x_cell_border(x) + BORDER_INSIDE_CELL_SIZE
 def get_y_cell_bg(y):
-    return get_y_cell_border(y) + BORDER_CELL_SIZE
+    return get_y_cell_border(y) + BORDER_INSIDE_CELL_SIZE
 def get_size_cell_bg():
-    return get_size_cell_border() - 2*BORDER_CELL_SIZE
-
-
-#GAME
-def get_width_game():
-    return get_x_board() + get_size_board() + MARGIN_GAME
-def get_height_game():
-    return get_y_board() + get_size_board() + MARGIN_GAME
+    return get_size_cell_border() - 2*BORDER_INSIDE_CELL_SIZE
