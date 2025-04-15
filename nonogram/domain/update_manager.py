@@ -3,20 +3,39 @@ from typing import Literal
 import level_detail as lvl
 import design.game_design as gd
 
-cells = [["EMPTY"] * lvl.NB_CELL for _ in range(lvl.NB_CELL)]
-clue_states_lines = [["DEFAULT"] * len(lvl.CLUES_LINES[index]) for index in range(lvl.NB_CELL)]
-clue_states_columns = [["DEFAULT"] * len(lvl.CLUES_COLUMNS[index]) for index in range(lvl.NB_CELL)]
-clues_state_lines = ["DEFAULT" for _ in range(lvl.NB_CELL)]
-clues_state_columns = ["DEFAULT" for _ in range(lvl.NB_CELL)]
+cells: list[list[Literal['EMPTY', 'CROSS', 'FILL']]] = []
+clue_states_lines: list[list[Literal['DONE', 'DEFAULT', 'ERROR', 'ALL_DONE']]] = []
+clue_states_columns: list[list[Literal['DONE', 'DEFAULT', 'ERROR', 'ALL_DONE']]] = []
+clues_state_lines: list[Literal['ERROR', 'DONE', 'DEFAULT']] = []
+clues_state_columns: list[Literal['ERROR', 'DONE', 'DEFAULT']] = []
+
+DETAIL = {
+    "NB_CELL" : 0,
+    "CLUES_COLUMNS" : [],
+    "CLUES_LINES" : []
+}
+
+#INIT
+def init_states(choice: Literal['HARD', 'EASY']):
+    NB_CELL, CLUES_COLUMNS, CLUES_LINES = lvl.get_nb_cell(choice), lvl.get_clues_columns(choice), lvl.get_clues_lines(choice)
+    for i in range(NB_CELL):
+        cells.append(["EMPTY"] * NB_CELL)
+        clue_states_lines.append(["DEFAULT"] * len(CLUES_LINES[i]))
+        clue_states_columns.append(["DEFAULT"] * len(CLUES_COLUMNS[i]))
+        clues_state_lines.append("DEFAULT")
+        clues_state_columns.append("DEFAULT")
+    DETAIL['NB_CELL'] = NB_CELL
+    DETAIL['CLUES_COLUMNS'] = CLUES_COLUMNS
+    DETAIL['CLUES_LINES'] = CLUES_LINES
 
 #UPDATE
-def update_clues(screen, type, index):
+def update_clues(screen: pygame.Surface, type: Literal['LINE', 'COLUMN'], index: int):
     if type == "LINE":
         pygame.draw.rect(screen, color=gd.get_color_clues_border(clues_state_lines[index]), border_radius=gd.BORDER_CLUES_RADIUS, rect=(gd.get_x_clues_border_line(), gd.get_y_clues_border_line(index), gd.get_width_clues_border_line(), gd.get_height_clues_border_line()))
         pygame.draw.rect(screen, color=gd.get_color_clues_bg(clues_state_lines[index]), border_radius=gd.BORDER_CLUES_RADIUS, rect=(gd.get_x_clues_bg_line(), gd.get_y_clues_bg_line(index), gd.get_width_clues_bg_line(), gd.get_height_clues_bg_line() ))
-        index_clue = len(lvl.CLUES_LINES[index]) - 1
+        index_clue = len(DETAIL['CLUES_LINES'][index]) - 1
         place_clue = 0
-        for clue in lvl.CLUES_LINES[index][::-1]:
+        for clue in DETAIL['CLUES_LINES'][index][::-1]:
             font = pygame.font.Font(None, gd.FONT_CLUE)
             clue_text = font.render(f"{clue}", True, gd.get_color_clue(clue_states_lines[index][index_clue]))
             screen.blit(clue_text, (gd.get_x_clue_line(clue_text, place_clue), gd.get_y_clue_line(index)))
@@ -25,16 +44,16 @@ def update_clues(screen, type, index):
     else:
         pygame.draw.rect(screen, color=gd.get_color_clues_border(clues_state_columns[index]), border_radius=gd.BORDER_CLUES_RADIUS, rect=(gd.get_x_clues_border_column(index), gd.get_y_clues_border_column(), gd.get_width_clues_border_column(), gd.get_height_clues_border_column()))
         pygame.draw.rect(screen, color=gd.get_color_clues_bg(clues_state_columns[index]), border_radius=gd.BORDER_CLUES_RADIUS, rect=(gd.get_x_clues_bg_column(index), gd.get_y_clues_bg_column(), gd.get_width_clues_bg_column(), gd.get_height_clues_bg_column() ))
-        index_clue = len(lvl.CLUES_COLUMNS[index]) - 1
+        index_clue = len(DETAIL['CLUES_COLUMNS'][index]) - 1
         place_clue = 0
-        for clue in lvl.CLUES_COLUMNS[index][::-1]:
+        for clue in DETAIL['CLUES_COLUMNS'][index][::-1]:
             font = pygame.font.Font(None, gd.FONT_CLUE)
             clue_text = font.render(f"{clue}", True, gd.get_color_clue(clue_states_columns[index][index_clue]))
             screen.blit(clue_text, (gd.get_x_clue_column(clue_text, index), gd.get_y_clue_column(place_clue)))
             index_clue -= 1
             place_clue += 1
 
-def update_cell(screen, x, y, action):
+def update_cell(screen: pygame.Surface, x: int, y: int, action: Literal['EMPTY', 'CROSS', 'FILL']):
     cells[y][x] = action
     pygame.draw.rect(screen, color=gd.get_color_cell_border(), rect=(gd.get_x_cell_border(x) , gd.get_y_cell_border(y), gd.get_size_cell_border(), gd.get_size_cell_border()))
     pygame.draw.rect(screen, color=gd.get_color_cell_bg(action), rect=(gd.get_x_cell_bg(x), gd.get_y_cell_bg(y), gd.get_size_cell_bg(), gd.get_size_cell_bg()))
@@ -45,28 +64,28 @@ def autoCross(screen: pygame.Surface, cells_to_check: list[Literal["EMPTY", "FIL
         if cell == "EMPTY":
             if type == "LINE":
                 update_cell(screen, cell_index, index, "CROSS")
-                clues = lvl.CLUES_COLUMNS[cell_index]
+                clues = DETAIL['CLUES_COLUMNS'][cell_index]
                 cells_to_check = []
                 for line in cells:
                     cells_to_check.append(line[cell_index])
                 checkCellsConstraints(screen, clues, cells_to_check, "COLUMN", cell_index)
             else:
                 update_cell(screen, index, cell_index, "CROSS")
-                clues = lvl.CLUES_LINES[cell_index]
+                clues = DETAIL['CLUES_LINES'][cell_index]
                 cells_to_check = cells[cell_index]
                 checkCellsConstraints(screen, clues, cells_to_check, "LINE", cell_index)
         cell_index += 1
 
 #EVENT
-def get_cell_click(pos: tuple[int, int]):
+def get_cell_click(pos: tuple[int, int]) -> (tuple[None, None] | tuple[int, int]) :
     x = pos[0] - gd.get_x_board() - gd.BORDER_BOARD_SIZE
     y = pos[1] - gd.get_y_board() - gd.BORDER_BOARD_SIZE
-    if x > lvl.NB_CELL*gd.CELL_SIZE or y > lvl.NB_CELL*gd.CELL_SIZE or x < 0 or y < 0:
+    if x > DETAIL['NB_CELL']*gd.CELL_SIZE or y > DETAIL['NB_CELL']*gd.CELL_SIZE or x < 0 or y < 0:
         return None, None
     else :
         return (int(x/gd.CELL_SIZE),int(y/gd.CELL_SIZE))
    
-def event_manager():
+def event_manager() -> tuple[bool, Literal['EMPTY', 'CROSS', 'FILL'] | None, int | None, int | None]:
     action, x_cell, y_cell = None, None, None
     running = True
     for event in pygame.event.get():
@@ -88,7 +107,7 @@ def event_manager():
     return running, action, x_cell, y_cell 
 
 #CONSTRAINTS
-def buildAreas(cells_to_check: list[Literal["EMPTY", "FILL", "CROSS"]]): 
+def buildAreas(cells_to_check: list[Literal["EMPTY", "FILL", "CROSS"]]) -> tuple[list[int], int, int]: 
     areas = []
     onArea = False
     nb_cross = 0
@@ -109,7 +128,7 @@ def buildAreas(cells_to_check: list[Literal["EMPTY", "FILL", "CROSS"]]):
             areas.append(-1)
     return areas, nb_cross, nb_fill     
 
-def checkArea(clue: int, area: int, byEmpty=False):
+def checkArea(clue: int, area: int, byEmpty=False) -> Literal['DONE', 'DEFAULT', 'ERROR'] :
     if not byEmpty and area == clue:
         return "DONE"
     else:
@@ -118,7 +137,7 @@ def checkArea(clue: int, area: int, byEmpty=False):
         else:
             return "ERROR"
 
-def checkValidityAreasStartRight(clues: list[int], index_area_already_check: int, clues_state: Literal["DONE", "DEFAULT", "ERROR"], clue_states: list[Literal["DONE", "DEFAULT", "ERROR", "ALL_DONE"]], areas: list[int]):
+def checkValidityAreasStartRight(clues: list[int], index_area_already_check: int, clues_state: Literal["DONE", "DEFAULT", "ERROR"], clue_states: list[Literal["DONE", "DEFAULT", "ERROR", "ALL_DONE"]], areas: list[int]) -> tuple[Literal['DONE', 'DEFAULT', 'ERROR'], list[Literal['DONE', 'DEFAULT', 'ERROR', 'ALL_DONE']]]:
     areas_already_check = index_area_already_check + 1
     clues.reverse()
     clue_states.reverse()
@@ -145,7 +164,7 @@ def checkValidityAreasStartRight(clues: list[int], index_area_already_check: int
     areas.reverse()
     return clues_state, clue_states
  
-def checkValidityAreasStartLeft(clues: list[int], areas: list[int]):
+def checkValidityAreasStartLeft(clues: list[int], areas: list[int]) -> tuple[Literal['ERROR', 'DONE', 'DEFAULT'], list[Literal['DONE', 'DEFAULT', 'ERROR', 'ALL_DONE']]]:
     clues_state = "DEFAULT"
     clue_states = ["DEFAULT" for _ in range(len(clues))]
         
@@ -190,7 +209,7 @@ def checkCellsConstraints(screen: pygame.Surface, clues: list[int], cells_to_che
         autoCross(screen, cells_to_check, type, index)
         
     #too much "validate" areas or all zones are crossed => fail
-    elif (len([i for i in areas if i > 0]) > len(clues) and nb_cross + nb_fill == lvl.NB_CELL) or nb_cross == lvl.NB_CELL:
+    elif (len([i for i in areas if i > 0]) > len(clues) and nb_cross + nb_fill == DETAIL['NB_CELL']) or nb_cross == DETAIL['NB_CELL']:
         clues_state = "ERROR"
         clue_states = ["DEFAULT" for _ in range(len(clues))]
     
@@ -208,16 +227,16 @@ def checkCellsConstraints(screen: pygame.Surface, clues: list[int], cells_to_che
         
 def checkConstraints(screen: pygame.Surface, x: int, y: int):
     #check constraint line
-    clues = lvl.CLUES_LINES[y]
+    clues = DETAIL['CLUES_LINES'][y]
     cells_to_check = cells[y]
     checkCellsConstraints(screen, clues, cells_to_check, "LINE", y)
         
     #check constraint column
-    clues = lvl.CLUES_COLUMNS[x]
+    clues = DETAIL['CLUES_COLUMNS'][x]
     cells_to_check = []
     for line in cells:
         cells_to_check.append(line[x])
     checkCellsConstraints(screen, clues, cells_to_check, "COLUMN", x)
 
-def checkVictory():
+def checkVictory() -> bool:
     return all(clues == "DONE" for clues in clues_state_lines) and all(clues == "DONE" for clues in clues_state_columns)

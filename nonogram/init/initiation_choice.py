@@ -1,12 +1,12 @@
 import pygame
 import design.choice_design as cd
 
-def display_title(screen):
+def display_title(screen: pygame.Surface):
     font = pygame.font.Font(None, cd.FONT_TITLE)
     title = font.render("NonoGram", True, cd.COLOR_TITLE)
     screen.blit(title, (cd.get_x_title(title), cd.get_y_title()))
     
-def display_buttons(screen):
+def display_buttons(screen: pygame.Surface):
     font = pygame.font.Font(None, cd.FONT_BUTTON)
     easy = font.render("EASY", True, cd.COLOR_FONT_BUTTON)
     hard = font.render("HARD", True, cd.COLOR_FONT_BUTTON)
@@ -15,6 +15,6 @@ def display_buttons(screen):
     screen.blit(easy, (cd.get_x_button_font(easy), cd.get_y_button_font(easy, 0)))
     screen.blit(hard, (cd.get_x_button_font(hard), cd.get_y_button_font(easy, 1)))
 
-def init_choice(screen):
+def init_choice(screen: pygame.Surface):
     display_title(screen)
     display_buttons(screen)

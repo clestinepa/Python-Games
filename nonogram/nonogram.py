@@ -13,20 +13,19 @@ pygame.display.set_caption("NonoGram")
 clock = pygame.time.Clock()
 
 running = True
-running_choice = True
-while running and running_choice:
+choice = None
+while running and not(choice):
     ic.init_choice(screen)
-    new_running, new_running_choice = cm.event_manager()
-    running, running_choice = new_running, new_running_choice
+    running, choice = cm.event_manager()
     
     pygame.display.flip()
 
-if not(ig.verify_lvl()) :
+if not(ig.verify_lvl(choice)) :
     print("Les détails du niveau ne sont pas correctement paramétrés")
     pygame.quit()
 else :
-    ig.init_game(screen)
-
+    ig.init_game(screen, choice)
+    
     running_game, victory = True, False
     while running and running_game:
         

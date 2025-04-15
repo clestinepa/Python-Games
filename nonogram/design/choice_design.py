@@ -1,3 +1,4 @@
+import pygame
 import design.game_design as gd
 import design.global_design as d
 
@@ -15,21 +16,21 @@ FONT_BUTTON = 30
 BORDER_BUTTON_RADIUS = d.BORDER_RADIUS
 
 
-def get_x_title(title):
+def get_x_title(title: pygame.Surface):
     return (d.SIZE_WINDOW-title.get_width())/2
 def get_y_title():
     return MARGIN_CHOICE
 
 def get_x_button():
     return (d.SIZE_WINDOW-get_width_button())/2
-def get_y_button(i):
+def get_y_button(i: int):
     return MARGIN_CHOICE*2 + d.get_height_text(FONT_TITLE) + i*(MARGIN_BUTTON+get_height_button())
 def get_width_button():
     return WIDTH_BUTTON
 def get_height_button():
     return HEIGHT_BUTTON
 
-def get_x_button_font(text):
+def get_x_button_font(text: pygame.Surface):
     return get_x_button() + (get_width_button()-text.get_width())/2
-def get_y_button_font(text, i):
+def get_y_button_font(text: pygame.Surface, i: int):
     return get_y_button(i) + (get_height_button()-text.get_height())/2
